@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2003151489844688417
+--- !u!1 &1147231243409101730
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2003151489844688419}
-  - component: {fileID: 2003151489844688416}
+  - component: {fileID: 5719326447792607434}
+  - component: {fileID: 5391746893203465152}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: UI Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2003151489844688419
+--- !u!4 &5719326447792607434
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003151489844688417}
+  m_GameObject: {fileID: 1147231243409101730}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,15 +31,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2003151489844688416
+--- !u!114 &5391746893203465152
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2003151489844688417}
+  m_GameObject: {fileID: 1147231243409101730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a6ccbe630f89834e9d1c15b1422237b, type: 3}
+  m_Script: {fileID: 11500000, guid: 048e632ec8f1db9448daa9821e5afbea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuCanvas: {fileID: 0}
+  gameCanvas: {fileID: 0}
+  playerOneMenuPanel: {fileID: 0}
+  playerTwoMenuPanel: {fileID: 0}
+  playerThreeMenuPanel: {fileID: 0}
+  playerFourMenuPanel: {fileID: 0}
+  playerOneScorePanel: {fileID: 0}
+  playerTwoScorePanel: {fileID: 0}
+  playerThreeScorePanel: {fileID: 0}
+  playerFourScorePanel: {fileID: 0}
+  playerCountText: {fileID: 0}

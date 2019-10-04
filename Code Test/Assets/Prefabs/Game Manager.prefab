@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1978120261577542103}
   - component: {fileID: 2542477649791877059}
+  - component: {fileID: 706796897}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,4 +44,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 366ebd22fb214d4469ec1c83ddcaadcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiManager: {fileID: 0}
+  playerOne: {fileID: 0}
+  playerTwo: {fileID: 0}
+  playerThree: {fileID: 0}
+  playerFour: {fileID: 0}
   playerCount: 2
+--- !u!114 &706796897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7610524018208645859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 048e632ec8f1db9448daa9821e5afbea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuCanvas: {fileID: 0}
+  gameCanvas: {fileID: 0}
+  playerOneMenuPanel: {fileID: 0}
+  playerTwoMenuPanel: {fileID: 0}
+  playerThreeMenuPanel: {fileID: 0}
+  playerFourMenuPanel: {fileID: 0}
+  playerOneScorePanel: {fileID: 0}
+  playerTwoScorePanel: {fileID: 0}
+  playerThreeScorePanel: {fileID: 0}
+  playerFourScorePanel: {fileID: 0}
+  playerCountText: {fileID: 0}

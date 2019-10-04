@@ -4,33 +4,50 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance = null;
-
-    //public int playerCount = 2;
+    [SerializeField] private UIManager uiManager = null;
+    /*
+    [Header("Player Objects")]
+    [SerializeField] private GameObject playerOne = null;
+    [SerializeField] private GameObject playerTwo = null;
+    [SerializeField] private GameObject playerThree = null;
+    [SerializeField] private GameObject playerFour = null;
+    */
+    private int playerCount = 2;
 
 
     private void Awake()
     {
-        if (instance == null)
+        if(uiManager == null)
         {
-            instance = this;
-        }
-        else if (instance != this)
-        {
+            Debug.LogError("No reference set to UI Manager.");
             enabled = false;
-            Destroy(gameObject);
         }
-
-        DontDestroyOnLoad(gameObject);
+    }
+    
+    public void StartGame()
+    {
+        // Called from Play button?
     }
 
     public void IncreasePlayerCount()
     {
-        Debug.Log("Increase players");
+        if(playerCount < 4)
+        {
+            playerCount++;
+
+            uiManager.SetPlayerCountText(playerCount);
+            uiManager.SetPlayerPanelVisibility(playerCount);
+        }
     }
 
     public void DecreasePlayerCount()
     {
-        Debug.Log("Decrease players");
+        if(playerCount > 2)
+        {
+            playerCount--;
+
+            uiManager.SetPlayerCountText(playerCount);
+            uiManager.SetPlayerPanelVisibility(playerCount);
+        }
     }
 }
