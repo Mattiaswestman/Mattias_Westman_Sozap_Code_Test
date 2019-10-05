@@ -21,14 +21,40 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerThreeScorePanel = null;
     [SerializeField] private GameObject playerFourScorePanel = null;
 
+    [Header("Player Names")]
+    [SerializeField] private TextMeshProUGUI playerOneName = null;
+    [SerializeField] private TextMeshProUGUI playerTwoName = null;
+    [SerializeField] private TextMeshProUGUI playerThreeName = null;
+    [SerializeField] private TextMeshProUGUI playerFourName = null;
+
     [Header("Various UI Elements")]
     [SerializeField] private TextMeshProUGUI playerCountText = null;
+
+    private Canvas currentCanvas = null;
 
 
     private void Start()
     {
+        InitializeUI();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Return))
+        {
+            ToggleCurrentCanvas();
+        }
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            SwapCurrentCanvas();
+        }
+    }
+
+    private void InitializeUI()
+    {
         menuCanvas.gameObject.SetActive(true);
         gameCanvas.gameObject.SetActive(false);
+        currentCanvas = menuCanvas;
 
         playerOneMenuPanel.SetActive(true);
         playerTwoMenuPanel.SetActive(true);
@@ -41,15 +67,43 @@ public class UIManager : MonoBehaviour
         playerFourScorePanel.SetActive(false);
     }
 
+    // Toggles current canvas on or off.
+    //
+    public void ToggleCurrentCanvas()
+    {
+        currentCanvas.gameObject.SetActive(!currentCanvas.gameObject.activeSelf);
+    }
+
+    // Swaps current canvas between the two existing.
+    //
+    public void SwapCurrentCanvas()
+    {
+        if(currentCanvas == menuCanvas)
+        {
+            currentCanvas = gameCanvas;
+            currentCanvas.gameObject.SetActive(menuCanvas.gameObject.activeSelf);
+            menuCanvas.gameObject.SetActive(false);
+        }
+        else
+        {
+            currentCanvas = menuCanvas;
+            currentCanvas.gameObject.SetActive(gameCanvas.gameObject.activeSelf);
+            gameCanvas.gameObject.SetActive(false);
+        }
+    }
+
+    // Sets the player count number on the main menu to given parameter. Is called when player count is changed in the game manager.
+    //
     public void SetPlayerCountText(int newPlayerCount)
     {
         playerCountText.text = newPlayerCount.ToString();
     }
 
-    // TODO: Rework.
+    // Enables/disables UI for the third and fourth player, based on the current player count. Is called when player count is changed in the game manager.
+    //
     public void SetPlayerPanelVisibility(int playerCount)
     {
-        switch (playerCount)
+        switch(playerCount)
         {
             case 2:
                 playerThreeMenuPanel.SetActive(false);
@@ -76,9 +130,16 @@ public class UIManager : MonoBehaviour
                 break;
         }
     }
-
+    
+    // Toggles the input field for changing names of players. Is called when a change name button is pressed on the main menu.
+    //
     public void ToggleNameChangeField(TMP_InputField nameChangeField)
     {
         nameChangeField.gameObject.SetActive(!nameChangeField.IsActive());
+    }
+
+    public void SetPlayerName(TextMeshProUGUI nameText)
+    {
+        
     }
 }
