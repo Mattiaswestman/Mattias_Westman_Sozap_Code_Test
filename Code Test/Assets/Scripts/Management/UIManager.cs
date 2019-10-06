@@ -5,9 +5,11 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager instance = null;
+
     [Header("Canvases")]
-    [SerializeField] private Canvas menuCanvas = null;
-    [SerializeField] private Canvas gameCanvas = null;
+    [SerializeField] public Canvas menuCanvas = null;
+    [SerializeField] public Canvas gameCanvas = null;
 
     [Header("Menu Panels")]
     [SerializeField] private GameObject playerOneMenuPanel = null;
@@ -20,18 +22,25 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerTwoScorePanel = null;
     [SerializeField] private GameObject playerThreeScorePanel = null;
     [SerializeField] private GameObject playerFourScorePanel = null;
-
-    [Header("Player Names")]
-    [SerializeField] private TextMeshProUGUI playerOneName = null;
-    [SerializeField] private TextMeshProUGUI playerTwoName = null;
-    [SerializeField] private TextMeshProUGUI playerThreeName = null;
-    [SerializeField] private TextMeshProUGUI playerFourName = null;
-
+    
     [Header("Various UI Elements")]
-    [SerializeField] private TextMeshProUGUI playerCountText = null;
+    [SerializeField] public GameObject scorePanel = null;
+    [SerializeField] public GameObject countdownText = null;
+    [SerializeField] public TextMeshProUGUI playerCountText = null;
 
-    private Canvas currentCanvas = null;
 
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else if(instance != this)
+        {
+            enabled = false;
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -42,20 +51,21 @@ public class UIManager : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Return))
         {
-            ToggleCurrentCanvas();
+            EnableCanvas(menuCanvas);
         }
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            SwapCurrentCanvas();
+            DisableCanvas(menuCanvas);
         }
     }
 
     private void InitializeUI()
     {
         menuCanvas.gameObject.SetActive(true);
-        gameCanvas.gameObject.SetActive(false);
-        currentCanvas = menuCanvas;
-
+        menuCanvas.gameObject.GetComponent<Canvas>().enabled = true;
+        gameCanvas.gameObject.SetActive(true);
+        gameCanvas.gameObject.GetComponent<Canvas>().enabled = false;
+        
         playerOneMenuPanel.SetActive(true);
         playerTwoMenuPanel.SetActive(true);
         playerThreeMenuPanel.SetActive(false);
@@ -66,37 +76,42 @@ public class UIManager : MonoBehaviour
         playerThreeScorePanel.SetActive(false);
         playerFourScorePanel.SetActive(false);
     }
-
-    // Toggles current canvas on or off.
-    //
-    public void ToggleCurrentCanvas()
+    
+    public void EnableCanvas(Canvas canvas)
     {
-        currentCanvas.gameObject.SetActive(!currentCanvas.gameObject.activeSelf);
+        canvas.gameObject.GetComponent<Canvas>().enabled = true;
     }
 
-    // Swaps current canvas between the two existing.
-    //
-    public void SwapCurrentCanvas()
+    public void DisableCanvas(Canvas canvas)
     {
-        if(currentCanvas == menuCanvas)
-        {
-            currentCanvas = gameCanvas;
-            currentCanvas.gameObject.SetActive(menuCanvas.gameObject.activeSelf);
-            menuCanvas.gameObject.SetActive(false);
-        }
-        else
-        {
-            currentCanvas = menuCanvas;
-            currentCanvas.gameObject.SetActive(gameCanvas.gameObject.activeSelf);
-            gameCanvas.gameObject.SetActive(false);
-        }
+        canvas.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
-    // Sets the player count number on the main menu to given parameter. Is called when player count is changed in the game manager.
-    //
-    public void SetPlayerCountText(int newPlayerCount)
+    public void EnableUIObject(GameObject panelObject)
     {
-        playerCountText.text = newPlayerCount.ToString();
+        panelObject.SetActive(true);
+    }
+
+    public void DisableUIObject(GameObject panelObject)
+    {
+        panelObject.SetActive(false);
+    }
+
+    public void SetTextToString(TextMeshProUGUI textComponent, string text)
+    {
+        textComponent.text = text;
+    }
+
+    public void SetTextToInt(TextMeshProUGUI textComponent, int number)
+    {
+        textComponent.text = number.ToString();
+    }
+
+    // Toggles the input field for changing names of players. Is called when a change name button is pressed on the main menu.
+    //
+    public void ToggleInputField(TMP_InputField inputField)
+    {
+        inputField.gameObject.SetActive(!inputField.IsActive());
     }
 
     // Enables/disables UI for the third and fourth player, based on the current player count. Is called when player count is changed in the game manager.
@@ -128,18 +143,9 @@ public class UIManager : MonoBehaviour
                 playerThreeScorePanel.SetActive(true);
                 playerFourScorePanel.SetActive(true);
                 break;
-        }
-    }
-    
-    // Toggles the input field for changing names of players. Is called when a change name button is pressed on the main menu.
-    //
-    public void ToggleNameChangeField(TMP_InputField nameChangeField)
-    {
-        nameChangeField.gameObject.SetActive(!nameChangeField.IsActive());
-    }
 
-    public void SetPlayerName(TextMeshProUGUI nameText)
-    {
-        
+            default:
+                break;
+        }
     }
 }

@@ -15,8 +15,10 @@ public class InputManager : MonoBehaviour
     [SerializeField] private float heartCooldown = 0f;
     [SerializeField] private float ammoCooldown = 0f;
 
-    private const float RIGHT = 1f;
-    private const float LEFT = -1f;
+    private bool isControllable = false;
+
+    private const float RIGHT_MODIFIER = 1f;
+    private const float LEFT_MODIFIER = -1f;
 
 
     private void Awake()
@@ -32,18 +34,22 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        ProcessInput();
+        if(isControllable)
+        {
+            ProcessInput();
+            Move();
+        }
     }
 
     private void ProcessInput()
     {
         if(Input.GetKey(RightKey))
         {
-            Turn(RIGHT);
+            Turn(RIGHT_MODIFIER);
         }
         if(Input.GetKey(LeftKey))
         {
-            Turn(LEFT);
+            Turn(LEFT_MODIFIER);
         }
         if(Input.GetKeyDown(UpKey))
         {
@@ -68,6 +74,11 @@ public class InputManager : MonoBehaviour
     private void UseInvincibility()
     {
 
+    }
+
+    private void Move()
+    {
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
