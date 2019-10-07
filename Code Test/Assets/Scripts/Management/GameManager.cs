@@ -4,25 +4,34 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private Score score;
+
     private int playerCount = 2;
     private int currentRoundNumber = 1;
 
     private bool gameOver = false;
 
-    
-    // WIP: Starts a new game from the main menu. Is called from the Play button.
-    //
-    public void StartGame()
+
+    private void Awake()
     {
-        UIManager.instance.DisableCanvas(UIManager.instance.menuCanvas);
-
-        UIManager.instance.EnableCanvas(UIManager.instance.gameCanvas);
-
-        //StartRound(currentRoundNumber);
+        score = GetComponent<Score>();
     }
 
-    // Starts a new round with of the given round number. Is called when a new round should be initiated.
-    //
+    private void Start()
+    {
+        UIManager.instance.SetTextAsInt(UIManager.instance.playerCountText, playerCount);
+        // Disable and hide spaceships.
+        UIManager.instance.UpdatePlayerUIVisibility(playerCount);
+    }
+    
+    public void StartGame()
+    {
+        UIManager.instance.DisableCanvas(UIManager.instance.titleMenuCanvas);
+        UIManager.instance.EnableCanvas(UIManager.instance.gameplayCanvas);
+
+        StartRound(currentRoundNumber);
+    }
+
     public void StartRound(int roundNumber)
     {
         // Reset player spawn.
@@ -30,28 +39,19 @@ public class GameManager : MonoBehaviour
         // Hide canvas.
         // Run game.
         // Score pause.
-        
-
-
-        StartCoroutine(PauseExecution(5f));
-
-        UIManager.instance.EnableUIObject(UIManager.instance.scorePanel);
     }
 
-    // Called from Menu button after game complete?
-    //
     public void EndGame()
     {
         ResetGameValues();
 
-        UIManager.instance.DisableCanvas(UIManager.instance.gameCanvas);
-
-        UIManager.instance.EnableCanvas(UIManager.instance.menuCanvas);
+        UIManager.instance.DisableCanvas(UIManager.instance.gameplayCanvas);
+        UIManager.instance.EnableCanvas(UIManager.instance.titleMenuCanvas);
     }
 
     private void ResetGameValues()
     {
-
+        currentRoundNumber = 1;
     }
 
     // Increases the number of players, and requests updates of the UI. Is called from a button on the main menu.
@@ -62,8 +62,9 @@ public class GameManager : MonoBehaviour
         {
             playerCount++;
 
-            UIManager.instance.SetTextToInt(UIManager.instance.playerCountText, playerCount);
-            UIManager.instance.SetPlayerPanelVisibility(playerCount);
+            UIManager.instance.SetTextAsInt(UIManager.instance.playerCountText, playerCount);
+            // Disable and hide spaceships.
+            UIManager.instance.UpdatePlayerUIVisibility(playerCount);
         }
     }
 
@@ -75,20 +76,9 @@ public class GameManager : MonoBehaviour
         {
             playerCount--;
             
-            UIManager.instance.SetTextToInt(UIManager.instance.playerCountText, playerCount);
-            UIManager.instance.SetPlayerPanelVisibility(playerCount);
-        }
-    }
-
-
-    IEnumerator PauseExecution(float duration)
-    {
-        float totalTime = 0f;
-
-        while(totalTime <= duration)
-        {
-            totalTime += Time.deltaTime;
-            yield return null;
+            UIManager.instance.SetTextAsInt(UIManager.instance.playerCountText, playerCount);
+            // Disable and hide spaceships.
+            UIManager.instance.UpdatePlayerUIVisibility(playerCount);
         }
     }
 }

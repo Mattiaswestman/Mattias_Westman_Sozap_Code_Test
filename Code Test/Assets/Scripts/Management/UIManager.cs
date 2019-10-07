@@ -8,8 +8,8 @@ public class UIManager : MonoBehaviour
     public static UIManager instance = null;
 
     [Header("Canvases")]
-    [SerializeField] public Canvas menuCanvas = null;
-    [SerializeField] public Canvas gameCanvas = null;
+    [SerializeField] public Canvas titleMenuCanvas = null;
+    [SerializeField] public Canvas gameplayCanvas = null;
 
     [Header("Menu Panels")]
     [SerializeField] private GameObject playerOneMenuPanel = null;
@@ -46,35 +46,13 @@ public class UIManager : MonoBehaviour
     {
         InitializeUI();
     }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Return))
-        {
-            EnableCanvas(menuCanvas);
-        }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            DisableCanvas(menuCanvas);
-        }
-    }
-
+    
     private void InitializeUI()
     {
-        menuCanvas.gameObject.SetActive(true);
-        menuCanvas.gameObject.GetComponent<Canvas>().enabled = true;
-        gameCanvas.gameObject.SetActive(true);
-        gameCanvas.gameObject.GetComponent<Canvas>().enabled = false;
-        
-        playerOneMenuPanel.SetActive(true);
-        playerTwoMenuPanel.SetActive(true);
-        playerThreeMenuPanel.SetActive(false);
-        playerFourMenuPanel.SetActive(false);
-
-        playerOneScorePanel.SetActive(true);
-        playerTwoScorePanel.SetActive(true);
-        playerThreeScorePanel.SetActive(false);
-        playerFourScorePanel.SetActive(false);
+        titleMenuCanvas.gameObject.SetActive(true);
+        EnableCanvas(titleMenuCanvas);
+        gameplayCanvas.gameObject.SetActive(true);
+        DisableCanvas(gameplayCanvas);
     }
     
     public void EnableCanvas(Canvas canvas)
@@ -87,65 +65,72 @@ public class UIManager : MonoBehaviour
         canvas.gameObject.GetComponent<Canvas>().enabled = false;
     }
 
-    public void EnableUIObject(GameObject panelObject)
+    public void EnableUIObject(GameObject uiObject)
     {
-        panelObject.SetActive(true);
+        uiObject.SetActive(true);
     }
 
-    public void DisableUIObject(GameObject panelObject)
+    public void DisableUIObject(GameObject uiObject)
     {
-        panelObject.SetActive(false);
-    }
-
-    public void SetTextToString(TextMeshProUGUI textComponent, string text)
-    {
-        textComponent.text = text;
-    }
-
-    public void SetTextToInt(TextMeshProUGUI textComponent, int number)
-    {
-        textComponent.text = number.ToString();
+        uiObject.SetActive(false);
     }
 
     // Toggles the input field for changing names of players. Is called when a change name button is pressed on the main menu.
     //
-    public void ToggleInputField(TMP_InputField inputField)
+    public void ToggleUIObject(GameObject uiObject)
     {
-        inputField.gameObject.SetActive(!inputField.IsActive());
+        uiObject.SetActive(!uiObject.activeSelf);
     }
+
+    public void SetTextAsString(TextMeshProUGUI textComponent, string text)
+    {
+        textComponent.text = text;
+    }
+
+    public void SetTextAsInt(TextMeshProUGUI textComponent, int number)
+    {
+        textComponent.text = number.ToString();
+    }
+
+    
 
     // Enables/disables UI for the third and fourth player, based on the current player count. Is called when player count is changed in the game manager.
     //
-    public void SetPlayerPanelVisibility(int playerCount)
+    public void UpdatePlayerUIVisibility(int playerCount)
     {
         switch(playerCount)
         {
             case 2:
-                playerThreeMenuPanel.SetActive(false);
-                playerFourMenuPanel.SetActive(false);
+                DisableUIObject(playerThreeMenuPanel);
+                DisableUIObject(playerFourMenuPanel);
 
-                playerThreeScorePanel.SetActive(false);
-                playerFourScorePanel.SetActive(false);
+                DisableUIObject(playerThreeScorePanel);
+                DisableUIObject(playerFourScorePanel);
                 break;
 
             case 3:
-                playerThreeMenuPanel.SetActive(true);
-                playerFourMenuPanel.SetActive(false);
+                EnableUIObject(playerThreeMenuPanel);
+                DisableUIObject(playerFourMenuPanel);
 
-                playerThreeScorePanel.SetActive(true);
-                playerFourScorePanel.SetActive(false);
+                EnableUIObject(playerThreeScorePanel);
+                DisableUIObject(playerFourScorePanel);
                 break;
 
             case 4:
-                playerThreeMenuPanel.SetActive(true);
-                playerFourMenuPanel.SetActive(true);
+                EnableUIObject(playerThreeMenuPanel);
+                EnableUIObject(playerFourMenuPanel);
 
-                playerThreeScorePanel.SetActive(true);
-                playerFourScorePanel.SetActive(true);
+                EnableUIObject(playerThreeScorePanel);
+                EnableUIObject(playerFourScorePanel);
                 break;
 
             default:
                 break;
         }
+    }
+
+    public void UpdateUIScore(int playerCount)
+    {
+        
     }
 }

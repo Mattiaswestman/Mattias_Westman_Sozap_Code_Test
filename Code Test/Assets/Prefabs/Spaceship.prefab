@@ -25,11 +25,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 181485251070977590}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15, y: 0, z: 1}
+  m_LocalPosition: {x: 0.15, y: 0, z: 2}
   m_LocalScale: {x: 0.5, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 2968152723403527863}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1755233618856357318
 SpriteRenderer:
@@ -93,6 +93,7 @@ GameObject:
   - component: {fileID: 2425544113380695378}
   - component: {fileID: -5615373093627641683}
   - component: {fileID: 4123178580205051809}
+  - component: {fileID: -6303598286420101538}
   m_Layer: 0
   m_Name: Spaceship
   m_TagString: Untagged
@@ -166,13 +167,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0d244ee4fba304aa1a33963228ff05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UpKey: 119
+  UpKey: 0
   DownKey: 0
   RightKey: 0
   LeftKey: 0
-  speed: 0
-  heartCooldown: 0
-  ammoCooldown: 0
+  moveSpeed: 0
+  turnSpeed: 0
+  isAlive: 0
+  canMove: 1
+--- !u!114 &-6303598286420101538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747992979523248716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 363f84086b7945544973913f81830cbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invincibilityObject: {fileID: 1426145751880015929}
+  duration: 3
+  cooldown: 3
 --- !u!1 &1426145751880015929
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,7 +201,7 @@ GameObject:
   - component: {fileID: 3444526011667454580}
   - component: {fileID: 2811623772066362461}
   m_Layer: 0
-  m_Name: Heart Powerup
+  m_Name: Invincibility Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -264,7 +281,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2968152723403527863}
   m_Layer: 0
-  m_Name: Ship
+  m_Name: Sprites
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -281,9 +298,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 8440646604153503131}
   - {fileID: 5877727654168964659}
   - {fileID: 920561711183126997}
-  - {fileID: 8440646604153503131}
   m_Father: {fileID: 3536271830625585244}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -298,7 +315,7 @@ GameObject:
   - component: {fileID: 3723055418424230769}
   - component: {fileID: 3830361497726948175}
   m_Layer: 0
-  m_Name: Ammo Powerup
+  m_Name: Weapon Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -397,7 +414,7 @@ Transform:
   m_LocalScale: {x: 0.25, y: 0.25, z: 1}
   m_Children: []
   m_Father: {fileID: 2968152723403527863}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1271796646644085887
 SpriteRenderer:
@@ -474,11 +491,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6496990295775006707}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 2968152723403527863}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7211804134968396032
 SpriteRenderer:
