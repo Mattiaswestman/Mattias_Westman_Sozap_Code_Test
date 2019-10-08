@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Invincibility : MonoBehaviour
 {
-    [SerializeField] GameObject invincibilityObject = null;
+    [SerializeField] SpriteRenderer iconRenderer = null;
 
     [SerializeField] private float duration = 0f;
     [SerializeField] private float cooldown = 0f;
@@ -12,12 +12,10 @@ public class Invincibility : MonoBehaviour
     private bool isActive = false;
     private bool isOnCooldown = false;
 
+
     public void ActivateInvincibility()
     {
-        if(!isOnCooldown)
-        {
-            StartCoroutine("InvincibilityRoutine");
-        }
+        StartCoroutine("InvincibilityRoutine");
     }
 
     public bool GetIsActive()
@@ -25,11 +23,17 @@ public class Invincibility : MonoBehaviour
         return isActive;
     }
 
+    public bool GetIsOnCooldown()
+    {
+        return isOnCooldown;
+    }
+
     IEnumerator InvincibilityRoutine()
     {
-        invincibilityObject.GetComponent<SpriteRenderer>().color = Color.red;
         Debug.Log("Invincible!");
+
         isActive = true;
+        iconRenderer.color = Color.red;
 
         yield return new WaitForSeconds(duration);
 
@@ -40,13 +44,14 @@ public class Invincibility : MonoBehaviour
 
     IEnumerator CooldownRoutine()
     {
-        invincibilityObject.GetComponent<SpriteRenderer>().color = Color.blue;
+        iconRenderer.color = Color.blue;
         Debug.Log("On cooldown..");
+
         isOnCooldown = true;
 
         yield return new WaitForSeconds(cooldown);
 
-        invincibilityObject.GetComponent<SpriteRenderer>().color = Color.white;
+        iconRenderer.color = Color.white;
         isOnCooldown = false;
     }
 }

@@ -50,7 +50,7 @@ public class UIManager : MonoBehaviour
     private void InitializeUI()
     {
         titleMenuCanvas.gameObject.SetActive(true);
-        EnableCanvas(titleMenuCanvas);
+        DisableCanvas(titleMenuCanvas);
         gameplayCanvas.gameObject.SetActive(true);
         DisableCanvas(gameplayCanvas);
     }

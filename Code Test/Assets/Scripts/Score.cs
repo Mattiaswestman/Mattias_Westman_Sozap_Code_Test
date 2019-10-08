@@ -9,7 +9,7 @@ public class Score : MonoBehaviour
     private int playerThreeScore = 0;
     private int playerFourScore = 0;
 
-    private void UpdateScore()
+    private void UpdateScorePanels()
     {
 
     }
