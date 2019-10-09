@@ -4,23 +4,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private Score score;
-
     private int playerCount = 2;
     private int currentRoundNumber = 1;
 
     private bool gameOver = false;
 
 
-    private void Awake()
-    {
-        score = GetComponent<Score>();
-    }
-
     private void Start()
     {
         UIManager.instance.SetTextAsInt(UIManager.instance.playerCountText, playerCount);
-        // Disable and hide spaceships.
         UIManager.instance.UpdatePlayerUIVisibility(playerCount);
     }
     

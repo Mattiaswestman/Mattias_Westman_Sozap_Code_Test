@@ -30,8 +30,6 @@ public class Invincibility : MonoBehaviour
 
     IEnumerator InvincibilityRoutine()
     {
-        Debug.Log("Invincible!");
-
         isActive = true;
         iconRenderer.color = Color.red;
 
@@ -45,8 +43,7 @@ public class Invincibility : MonoBehaviour
     IEnumerator CooldownRoutine()
     {
         iconRenderer.color = Color.blue;
-        Debug.Log("On cooldown..");
-
+        
         isOnCooldown = true;
 
         yield return new WaitForSeconds(cooldown);

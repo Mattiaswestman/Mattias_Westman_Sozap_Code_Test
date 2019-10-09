@@ -129,11 +129,13 @@ public class InputManager : MonoBehaviour
 
 
         }
+        /*
         if(collision.tag == "PlayerTrail" && !myInvincibility.GetIsActive())
         {
             isAlive = false;
 
 
         }
+        */
     }
 }
