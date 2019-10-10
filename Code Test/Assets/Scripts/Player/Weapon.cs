@@ -1,19 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] SpriteRenderer iconRenderer = null;
-
-    [SerializeField] GameObject projectilePrefab = null;
-    [SerializeField] Transform projectileSceneParent = null;
-    [SerializeField] Transform projectileOrigin = null;
-
+    [Header("References")]
+    [SerializeField] private SpriteRenderer iconRenderer = null;
+    [SerializeField] private GameObject projectilePrefab = null;
+    [SerializeField] private Transform projectileSceneParent = null;
+    [SerializeField] private Transform projectileOrigin = null;
+    
+    [Space(20)]
     [SerializeField] private float projectileSpeed = 0f;
     [SerializeField] private float cooldown = 0f;
 
     private bool isOnCooldown = false;
+    public bool IsOnCooldown { get { return isOnCooldown; } }
 
 
     private void Awake()
@@ -37,15 +40,16 @@ public class Weapon : MonoBehaviour
     {
         GameObject projectile = Instantiate(projectilePrefab, projectileOrigin.position, Quaternion.identity) as GameObject;
         projectile.transform.SetParent(projectileSceneParent);
+        projectile.GetComponent<Projectile>().owner = gameObject;
 
         projectile.GetComponent<Rigidbody2D>().AddForce(direction * projectileSpeed);
 
         StartCoroutine("CooldownRoutine");
     }
-
-    public bool GetIsOnCooldown()
+    
+    public void UpdateRoundScore()
     {
-        return isOnCooldown;
+        
     }
 
     IEnumerator CooldownRoutine()

@@ -4,30 +4,24 @@ using UnityEngine;
 
 public class Invincibility : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] SpriteRenderer iconRenderer = null;
 
+    [Space(20)]
     [SerializeField] private float duration = 0f;
     [SerializeField] private float cooldown = 0f;
 
     private bool isActive = false;
+    public bool IsActive { get { return isActive; } }
     private bool isOnCooldown = false;
+    public bool IsOnCooldown { get { return isOnCooldown; } }
 
 
     public void ActivateInvincibility()
     {
         StartCoroutine("InvincibilityRoutine");
     }
-
-    public bool GetIsActive()
-    {
-        return isActive;
-    }
-
-    public bool GetIsOnCooldown()
-    {
-        return isOnCooldown;
-    }
-
+    
     IEnumerator InvincibilityRoutine()
     {
         isActive = true;

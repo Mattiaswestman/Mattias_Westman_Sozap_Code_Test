@@ -4,32 +4,23 @@ using UnityEngine;
 
 public class Trail : MonoBehaviour
 {
-    [SerializeField] private TrailRenderer myTrailRenderer = null;
-    [SerializeField] private EdgeCollider2D myEdgeCollider2D = null;
+    [Header("References")]
     [SerializeField] private Transform trailOrigin = null;
+    [SerializeField] private Transform trailSceneParent = null;
+    [SerializeField] private Material trailMaterial = null;
 
+    [Header("Trail")]
+    [SerializeField] private float lineWidth = 0f;
+    [SerializeField] private Color lineColor = default;
+    
+    [Header("Time")]
     [SerializeField] private float drawTime = 0f;
     [SerializeField][Range(0f, 1f)] private float maxDrawTimeDeviation = 0f;
     [SerializeField] private float pauseTime = 0f;
-    
+
     private bool isDrawing = false;
-    private bool isPaused = false;
-
+    private bool isPaused = true;
     
-    private void Awake()
-    {
-        if(myTrailRenderer == null)
-        {
-            Debug.LogError($"Trail: No reference to TrailRenderer component set on {gameObject.name}.");
-            enabled = false;
-            return;
-        }
-    }
-
-    private void Start()
-    {
-        myTrailRenderer.emitting = false;
-    }
 
     private void FixedUpdate()
     {
@@ -45,24 +36,36 @@ public class Trail : MonoBehaviour
 
         var totalDrawTime = drawTime + (Random.Range(-maxDrawTimeDeviation, maxDrawTimeDeviation));
         var timer = 0f;
-        
+
+        GameObject trail = new GameObject("Trail", typeof(LineRenderer), typeof(EdgeCollider2D));
+        trail.tag = "PlayerTrail";
+        trail.transform.SetParent(trailSceneParent);
+
+        LineRenderer trailRenderer = trail.GetComponent<LineRenderer>();
+        trailRenderer.startWidth = trailRenderer.endWidth = lineWidth;
+        trailRenderer.startColor = trailRenderer.endColor = lineColor;
+        trailRenderer.sharedMaterial = trailMaterial;
+
+        trailRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        trailRenderer.receiveShadows = false;
+
+        EdgeCollider2D trailCollider = trail.GetComponent<EdgeCollider2D>();
+        trailCollider.isTrigger = true;
+        trailCollider.edgeRadius = lineWidth / 2;
+
+        List<Vector2> points = new List<Vector2>();
+
         while(timer < totalDrawTime)
         {
-            myTrailRenderer.emitting = true;
+            points.Add(trailOrigin.position);
+            trailRenderer.positionCount = points.Count;
+            trailRenderer.SetPosition(trailRenderer.positionCount - 1, trailOrigin.position);
 
-            /*
-            Vector3[] positions = new Vector3[myTrailRenderer.positionCount];
-            Vector2[] positions2D = new Vector2[myTrailRenderer.positionCount];
-
-            myTrailRenderer.GetPositions(positions);
-
-            for(int i = 0; i < positions.Length; i++)
+            if(points.Count > 1)
             {
-                positions2D[i] = positions[i];
+                trailCollider.points = points.ToArray();
             }
 
-            myEdgeCollider2D.points = positions2D;
-            */
             timer += Time.deltaTime;
             yield return null;
         }
@@ -74,9 +77,7 @@ public class Trail : MonoBehaviour
     {
         isPaused = true;
         isDrawing = false;
-
-        myTrailRenderer.emitting = false;
-
+        
         yield return new WaitForSeconds(pauseTime);
 
         isPaused = false;

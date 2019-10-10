@@ -24,9 +24,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerFourScorePanel = null;
     
     [Header("Various UI Elements")]
-    [SerializeField] public GameObject scorePanel = null;
-    [SerializeField] public GameObject countdownText = null;
     [SerializeField] public TextMeshProUGUI playerCountText = null;
+    [SerializeField] public GameObject countdownText = null;
+    [SerializeField] public GameObject scorePanel = null;
+    [SerializeField] public GameObject nextRoundButton = null;
+    [SerializeField] public GameObject menuButton = null;
 
 
     private void Awake()
@@ -50,7 +52,7 @@ public class UIManager : MonoBehaviour
     private void InitializeUI()
     {
         titleMenuCanvas.gameObject.SetActive(true);
-        DisableCanvas(titleMenuCanvas);
+        EnableCanvas(titleMenuCanvas);
         gameplayCanvas.gameObject.SetActive(true);
         DisableCanvas(gameplayCanvas);
     }
@@ -84,19 +86,36 @@ public class UIManager : MonoBehaviour
 
     public void SetTextAsString(TextMeshProUGUI textComponent, string text)
     {
-        textComponent.text = text;
+        textComponent.SetText(text);
+    }
+
+    // Overloaded function of above.
+    //
+    public void SetTextAsString(TextMeshPro textComponent, string text)
+    {
+        textComponent.SetText(text);
     }
 
     public void SetTextAsInt(TextMeshProUGUI textComponent, int number)
     {
-        textComponent.text = number.ToString();
+        textComponent.SetText(number.ToString());
     }
 
-    
+    // Overloaded function of above.
+    //
+    public void SetTextAsInt(TextMeshPro textComponent, int number)
+    {
+        textComponent.SetText(number.ToString());
+    }
+
+    public void StartRoundCountdown(GameObject uiObject, int round)
+    {
+
+    }
 
     // Enables/disables UI for the third and fourth player, based on the current player count. Is called when player count is changed in the game manager.
     //
-    public void UpdatePlayerUIVisibility(int playerCount)
+    public void SetPlayerUIEnabled(int playerCount)
     {
         switch(playerCount)
         {
@@ -129,7 +148,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateUIScore(int playerCount)
+    public void UpdateUIScore(int[] playerScore)
     {
         
     }

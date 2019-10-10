@@ -5,6 +5,7 @@ using TMPro;
 
 public class InputFieldHelper : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private TextMeshProUGUI[] textToModify = null;
 
     private TMP_InputField inputField = null;

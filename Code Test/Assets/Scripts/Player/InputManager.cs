@@ -4,28 +4,34 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    private Rigidbody2D myRigidbody = null;
-    private Weapon myWeapon = null;
-    private Invincibility myInvincibility = null;
-
+    [Header("References")]
     [SerializeField] private GameObject mySpaceship = null;
+    [SerializeField] private RectTransform startPositionRectTransform = null;
+
+    [Header("Keys")]
     [SerializeField] private KeyCode UpKey = default;
     [SerializeField] private KeyCode DownKey = default;
     [SerializeField] private KeyCode RightKey = default;
     [SerializeField] private KeyCode LeftKey = default;
     
+    [Space(20)]
     [SerializeField] private float moveSpeed = 0f;
     [SerializeField] private float turnSpeed = 0f;
 
+    private Rigidbody2D myRigidbody = null;
+    private Health myHealth = null;
+    private Weapon myWeapon = null;
+    private Invincibility myInvincibility = null;
+
     private bool isControllable = true;
-    private bool isAlive = true;
-    private bool canMove = true;
+    public bool IsControllable { get { return isControllable; } set { isControllable = value; } }
+    [SerializeField] private bool canMove = true;
 
     private Vector2 moveDirection = Vector2.right;
-    private Vector2 startPosition = Vector2.zero;
+    private Vector3 startPosition = Vector3.zero;
     
-    private const float RIGHT_TURN_MODIFIER = -1f;
-    private const float LEFT_TURN_MODIFIER = 1f;
+    private const float TURN_RIGHT_MODIFIER = -1f;
+    private const float TURN_LEFT_MODIFIER = 1f;
 
 
     private void Awake()
@@ -38,10 +44,10 @@ public class InputManager : MonoBehaviour
             return;
         }
 
-        myInvincibility = GetComponent<Invincibility>();
-        if(myInvincibility == null)
+        myHealth = GetComponent<Health>();
+        if(myHealth == null)
         {
-            Debug.LogError($"InputManager: No Invincibility component found on {gameObject.name}.");
+            Debug.LogError($"InputManager: No Health component found on {gameObject.name}.");
             enabled = false;
             return;
         }
@@ -53,16 +59,25 @@ public class InputManager : MonoBehaviour
             enabled = false;
             return;
         }
+
+        myInvincibility = GetComponent<Invincibility>();
+        if(myInvincibility == null)
+        {
+            Debug.LogError($"InputManager: No Invincibility component found on {gameObject.name}.");
+            enabled = false;
+            return;
+        }
     }
 
     private void Start()
     {
-        startPosition = transform.position;
+        startPosition = Camera.main.ScreenToWorldPoint(startPositionRectTransform.transform.position);
+        transform.position = new Vector3(startPosition.x, startPosition.y, 0f);
     }
 
     private void Update()
     {
-        if(isControllable && isAlive)
+        if(isControllable && myHealth.IsAlive)
         {
             ProcessInput();
         }
@@ -70,7 +85,7 @@ public class InputManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(isControllable && isAlive)
+        if(isControllable && myHealth.IsAlive)
         {
             ProcessFixedInput();
 
@@ -83,11 +98,11 @@ public class InputManager : MonoBehaviour
 
     private void ProcessInput()
     {
-        if(Input.GetKeyDown(UpKey) && !myWeapon.GetIsOnCooldown())
+        if(Input.GetKeyDown(UpKey) && !myWeapon.IsOnCooldown)
         {
             myWeapon.Shoot(moveDirection);
         }
-        if(Input.GetKeyDown(DownKey) && !myInvincibility.GetIsOnCooldown())
+        if(Input.GetKeyDown(DownKey) && !myInvincibility.IsOnCooldown)
         {
             myInvincibility.ActivateInvincibility();
         }
@@ -97,45 +112,22 @@ public class InputManager : MonoBehaviour
     {
         if(Input.GetKey(RightKey))
         {
-            Turn(RIGHT_TURN_MODIFIER);
+            Turn(TURN_RIGHT_MODIFIER);
         }
         if(Input.GetKey(LeftKey))
         {
-            Turn(LEFT_TURN_MODIFIER);
+            Turn(TURN_LEFT_MODIFIER);
         }
     }
 
-    private void Turn(float rotateValue)
+    private void Turn(float rotationModifier)
     {
-        mySpaceship.transform.Rotate(Vector3.forward, turnSpeed * rotateValue * Time.fixedDeltaTime);
+        mySpaceship.transform.Rotate(Vector3.forward, turnSpeed * rotationModifier * Time.fixedDeltaTime);
         moveDirection = mySpaceship.transform.right;
     }
     
     private void Move()
     {
         myRigidbody.MovePosition(myRigidbody.position + moveDirection * moveSpeed * Time.fixedDeltaTime);
-    }
-
-    private void ResetPlayer()
-    {
-        transform.position = startPosition;
-    }
-    
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "LevelBoundary")
-        {
-            isAlive = false;
-
-
-        }
-        /*
-        if(collision.tag == "PlayerTrail" && !myInvincibility.GetIsActive())
-        {
-            isAlive = false;
-
-
-        }
-        */
     }
 }

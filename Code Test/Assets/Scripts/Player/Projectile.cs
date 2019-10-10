@@ -11,12 +11,12 @@ public class Projectile : MonoBehaviour
     {
         if(collision.tag == "Player" && collision.gameObject != owner)
         {
-
+            owner.GetComponent<RoundScore>().UpdateRoundScore();
 
             enabled = false;
             Destroy(gameObject);
         }
-        if(collision.tag == "LevelBoundary")
+        if(collision.tag == "LevelBoundary" || collision.tag == "PlayerTrail")
         {
             enabled = false;
             Destroy(gameObject);
