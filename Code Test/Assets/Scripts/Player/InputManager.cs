@@ -5,8 +5,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject mySpaceship = null;
-    [SerializeField] private RectTransform startPositionRectTransform = null;
+    [SerializeField] private Transform mySpaceshipTransform = null;
 
     [Header("Keys")]
     [SerializeField] private KeyCode UpKey = default;
@@ -23,13 +22,14 @@ public class InputManager : MonoBehaviour
     private Weapon myWeapon = null;
     private Invincibility myInvincibility = null;
 
-    private bool isControllable = true;
-    public bool IsControllable { get { return isControllable; } set { isControllable = value; } }
-    [SerializeField] private bool canMove = true;
+    private bool isControllable = false;
+    public bool IsControllable { set { isControllable = value; } }
+    private bool canMove = false;
+    public bool CanMove { set { canMove = value; } }
 
     private Vector2 moveDirection = Vector2.right;
-    private Vector3 startPosition = Vector3.zero;
-    
+    public Vector2 MoveDirection { set { moveDirection = value; } }
+
     private const float TURN_RIGHT_MODIFIER = -1f;
     private const float TURN_LEFT_MODIFIER = 1f;
 
@@ -68,16 +68,10 @@ public class InputManager : MonoBehaviour
             return;
         }
     }
-
-    private void Start()
-    {
-        startPosition = Camera.main.ScreenToWorldPoint(startPositionRectTransform.transform.position);
-        transform.position = new Vector3(startPosition.x, startPosition.y, 0f);
-    }
-
+    
     private void Update()
     {
-        if(isControllable && myHealth.IsAlive)
+        if(canMove && myHealth.IsAlive)
         {
             ProcessInput();
         }
@@ -122,8 +116,8 @@ public class InputManager : MonoBehaviour
 
     private void Turn(float rotationModifier)
     {
-        mySpaceship.transform.Rotate(Vector3.forward, turnSpeed * rotationModifier * Time.fixedDeltaTime);
-        moveDirection = mySpaceship.transform.right;
+        mySpaceshipTransform.Rotate(Vector3.forward, turnSpeed * rotationModifier * Time.fixedDeltaTime);
+        moveDirection = mySpaceshipTransform.right;
     }
     
     private void Move()

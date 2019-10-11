@@ -8,9 +8,10 @@ public class UIManager : MonoBehaviour
     public static UIManager instance = null;
 
     [Header("Canvases")]
-    [SerializeField] public Canvas titleMenuCanvas = null;
-    [SerializeField] public Canvas gameplayCanvas = null;
-
+    [SerializeField] public Canvas mainMenuCanvas = null;
+    [SerializeField] public Canvas scoreMenuCanvas = null;
+    [SerializeField] public Canvas countdownCanvas = null;
+    /*
     [Header("Menu Panels")]
     [SerializeField] private GameObject playerOneMenuPanel = null;
     [SerializeField] private GameObject playerTwoMenuPanel = null;
@@ -22,13 +23,27 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerTwoScorePanel = null;
     [SerializeField] private GameObject playerThreeScorePanel = null;
     [SerializeField] private GameObject playerFourScorePanel = null;
-    
+
+    [Header("Player Score")]
+    [SerializeField] public TextMeshProUGUI playerOneScoreText = null;
+    [SerializeField] public TextMeshProUGUI playerTwoScoreText = null;
+    [SerializeField] public TextMeshProUGUI playerThreeScoreText = null;
+    [SerializeField] public TextMeshProUGUI playerFourScoreText = null;
+    */
+    [Header("Player UI")]
+    [SerializeField] private GameObject[] playerMainMenuPanels = null;
+    [Space(10)]
+    [SerializeField] private GameObject[] playerScoreMenuPanels = null;
+    [Space(10)]
+    public TextMeshProUGUI[] playerScoreTexts = null;
+
     [Header("Various UI Elements")]
     [SerializeField] public TextMeshProUGUI playerCountText = null;
     [SerializeField] public GameObject countdownText = null;
-    [SerializeField] public GameObject scorePanel = null;
     [SerializeField] public GameObject nextRoundButton = null;
     [SerializeField] public GameObject menuButton = null;
+
+    private Canvas activeCanvas = null;
 
 
     private void Awake()
@@ -51,12 +66,95 @@ public class UIManager : MonoBehaviour
     
     private void InitializeUI()
     {
-        titleMenuCanvas.gameObject.SetActive(true);
-        EnableCanvas(titleMenuCanvas);
-        gameplayCanvas.gameObject.SetActive(true);
-        DisableCanvas(gameplayCanvas);
+        mainMenuCanvas.gameObject.SetActive(true);
+        EnableCanvas(mainMenuCanvas);
+        scoreMenuCanvas.gameObject.SetActive(true);
+        DisableCanvas(scoreMenuCanvas);
+        countdownCanvas.gameObject.SetActive(true);
+        DisableCanvas(countdownCanvas);
+
+        activeCanvas = mainMenuCanvas;
     }
-    
+
+    public void OpenMainMenu()
+    {
+        // Disable active canvas.
+        DisableCanvas(activeCanvas);
+        // Fade in main menu.
+        activeCanvas = mainMenuCanvas;
+        EnableCanvas(activeCanvas);
+    }
+
+    public void OpenScoreMenu()
+    {
+        // Disable active canvas.
+        DisableCanvas(activeCanvas);
+        // Fade in score menu.
+        activeCanvas = scoreMenuCanvas;
+        EnableCanvas(activeCanvas);
+    }
+
+    public void StartCountdown(int roundNumber)
+    {
+        // Fade out active canvas.
+        // Disable active canvas.
+        DisableCanvas(activeCanvas);
+        // Set countdown canvas active.
+        activeCanvas = countdownCanvas;
+        EnableCanvas(activeCanvas);
+        
+        // *Run countdown*
+
+        // Disable countdown canvas.
+        DisableCanvas(activeCanvas);
+    }
+
+    public void StartWinAnimation()
+    {
+
+    }
+
+    public void SetPlayerUIEnabled(int playerCount)
+    {
+        switch(playerCount)
+        {
+            case 2:
+                DisableUIObject(playerMainMenuPanels[2]);
+                DisableUIObject(playerMainMenuPanels[3]);
+
+                DisableUIObject(playerScoreMenuPanels[2]);
+                DisableUIObject(playerScoreMenuPanels[3]);
+                break;
+
+            case 3:
+                EnableUIObject(playerMainMenuPanels[2]);
+                DisableUIObject(playerMainMenuPanels[3]);
+
+                EnableUIObject(playerScoreMenuPanels[2]);
+                DisableUIObject(playerScoreMenuPanels[3]);
+                break;
+
+            case 4:
+                EnableUIObject(playerMainMenuPanels[2]);
+                EnableUIObject(playerMainMenuPanels[3]);
+
+                EnableUIObject(playerScoreMenuPanels[2]);
+                EnableUIObject(playerScoreMenuPanels[3]);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void UpdateUIScore(List<int> playerScore)
+    {
+        for(int i = 0; i < playerScore.Count; i++)
+        {
+            SetTextComponentToInt(playerScoreTexts[i], playerScore[i]);
+        }
+    }
+
     public void EnableCanvas(Canvas canvas)
     {
         canvas.gameObject.GetComponent<Canvas>().enabled = true;
@@ -77,79 +175,28 @@ public class UIManager : MonoBehaviour
         uiObject.SetActive(false);
     }
 
-    // Toggles the input field for changing names of players. Is called when a change name button is pressed on the main menu.
-    //
     public void ToggleUIObject(GameObject uiObject)
     {
         uiObject.SetActive(!uiObject.activeSelf);
     }
 
-    public void SetTextAsString(TextMeshProUGUI textComponent, string text)
+    public void SetTextComponentToString(TextMeshProUGUI textComponent, string text)
     {
         textComponent.SetText(text);
     }
 
-    // Overloaded function of above.
-    //
-    public void SetTextAsString(TextMeshPro textComponent, string text)
+    public void SetTextComponentToString(TextMeshPro textComponent, string text)
     {
         textComponent.SetText(text);
     }
 
-    public void SetTextAsInt(TextMeshProUGUI textComponent, int number)
+    public void SetTextComponentToInt(TextMeshProUGUI textComponent, int number)
     {
         textComponent.SetText(number.ToString());
     }
 
-    // Overloaded function of above.
-    //
-    public void SetTextAsInt(TextMeshPro textComponent, int number)
+    public void SetTextComponentToInt(TextMeshPro textComponent, int number)
     {
         textComponent.SetText(number.ToString());
-    }
-
-    public void StartRoundCountdown(GameObject uiObject, int round)
-    {
-
-    }
-
-    // Enables/disables UI for the third and fourth player, based on the current player count. Is called when player count is changed in the game manager.
-    //
-    public void SetPlayerUIEnabled(int playerCount)
-    {
-        switch(playerCount)
-        {
-            case 2:
-                DisableUIObject(playerThreeMenuPanel);
-                DisableUIObject(playerFourMenuPanel);
-
-                DisableUIObject(playerThreeScorePanel);
-                DisableUIObject(playerFourScorePanel);
-                break;
-
-            case 3:
-                EnableUIObject(playerThreeMenuPanel);
-                DisableUIObject(playerFourMenuPanel);
-
-                EnableUIObject(playerThreeScorePanel);
-                DisableUIObject(playerFourScorePanel);
-                break;
-
-            case 4:
-                EnableUIObject(playerThreeMenuPanel);
-                EnableUIObject(playerFourMenuPanel);
-
-                EnableUIObject(playerThreeScorePanel);
-                EnableUIObject(playerFourScorePanel);
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    public void UpdateUIScore(int[] playerScore)
-    {
-        
     }
 }

@@ -638,7 +638,7 @@ PrefabInstance:
     - target: {fileID: 4421175139712341562, guid: da3c2bd2c5c034841b1d1bb57bcaf38d,
         type: 3}
       propertyPath: m_Name
-      value: Player Menu Panel Text Variant
+      value: Player Main Menu Panel Text Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3922279769997598107, guid: da3c2bd2c5c034841b1d1bb57bcaf38d,
         type: 3}

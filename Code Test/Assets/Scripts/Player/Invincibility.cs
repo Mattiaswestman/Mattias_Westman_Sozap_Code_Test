@@ -12,9 +12,9 @@ public class Invincibility : MonoBehaviour
     [SerializeField] private float cooldown = 0f;
 
     private bool isActive = false;
-    public bool IsActive { get { return isActive; } }
+    public bool IsActive { get { return isActive; } set { isActive = value; } }
     private bool isOnCooldown = false;
-    public bool IsOnCooldown { get { return isOnCooldown; } }
+    public bool IsOnCooldown { get { return isOnCooldown; } set { isOnCooldown = value; } }
 
 
     public void ActivateInvincibility()

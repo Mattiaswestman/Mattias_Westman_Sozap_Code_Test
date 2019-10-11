@@ -18,19 +18,37 @@ public class Trail : MonoBehaviour
     [SerializeField][Range(0f, 1f)] private float maxDrawTimeDeviation = 0f;
     [SerializeField] private float pauseTime = 0f;
 
-    private bool isDrawing = false;
-    private bool isPaused = true;
-    
+    private Health myHealth = null;
 
-    private void FixedUpdate()
+    private Coroutine drawRoutine = null;
+    private Coroutine pauseRoutine = null;
+
+    private bool isDrawing = false;
+    public bool IsDrawing { set { isDrawing = value; } }
+    private bool isPaused = true;
+    public bool IsPaused { set { isPaused = value; } }
+
+
+    private void Awake()
     {
-        if(!isPaused && !isDrawing)
+        myHealth = GetComponent<Health>();
+        if(myHealth == null)
         {
-            StartCoroutine("DrawTrailRoutine");
+            Debug.LogError($"Trail: No Health component found on {gameObject.name}.");
+            enabled = false;
+            return;
         }
     }
     
-    IEnumerator DrawTrailRoutine()
+    private void FixedUpdate()
+    {
+        if(!isPaused && !isDrawing && myHealth.IsAlive)
+        {
+            drawRoutine = StartCoroutine(DrawTrailRoutine());
+        }
+    }
+    
+    private IEnumerator DrawTrailRoutine()
     {
         isDrawing = true;
 
@@ -41,21 +59,43 @@ public class Trail : MonoBehaviour
         trail.tag = "PlayerTrail";
         trail.transform.SetParent(trailSceneParent);
 
-        LineRenderer trailRenderer = trail.GetComponent<LineRenderer>();
-        trailRenderer.startWidth = trailRenderer.endWidth = lineWidth;
-        trailRenderer.startColor = trailRenderer.endColor = lineColor;
-        trailRenderer.sharedMaterial = trailMaterial;
+        LineRenderer trailRenderer = null;
+        try
+        {
+            trailRenderer = trail.GetComponent<LineRenderer>();
 
-        trailRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        trailRenderer.receiveShadows = false;
+            trailRenderer.startWidth = trailRenderer.endWidth = lineWidth;
+            trailRenderer.startColor = trailRenderer.endColor = lineColor;
+            trailRenderer.sharedMaterial = trailMaterial;
 
-        EdgeCollider2D trailCollider = trail.GetComponent<EdgeCollider2D>();
-        trailCollider.isTrigger = true;
-        trailCollider.edgeRadius = lineWidth / 2;
+            trailRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            trailRenderer.receiveShadows = false;
+        }
+        catch(MissingReferenceException exception)
+        {
+            Debug.LogError(exception);
+            isDrawing = false;
+            StopCoroutine(drawRoutine);
+        }
 
-        List<Vector2> points = new List<Vector2>();
+        EdgeCollider2D trailCollider = null;
+        try
+        {
+            trailCollider = trail.GetComponent<EdgeCollider2D>();
 
-        while(timer < totalDrawTime)
+            trailCollider.isTrigger = true;
+            trailCollider.edgeRadius = lineWidth / 2;
+        }
+        catch(MissingReferenceException exception)
+        {
+            Debug.LogError(exception);
+            isDrawing = false;
+            StopCoroutine(drawRoutine);
+        }
+
+        var points = new List<Vector2>();
+
+        while(timer < totalDrawTime && isDrawing)
         {
             points.Add(trailOrigin.position);
             trailRenderer.positionCount = points.Count;
@@ -70,10 +110,13 @@ public class Trail : MonoBehaviour
             yield return null;
         }
 
-        StartCoroutine("PauseTrailRoutine");
+        if(!isPaused)
+        {
+            pauseRoutine = StartCoroutine(PauseTrailRoutine());
+        }
     }
 
-    IEnumerator PauseTrailRoutine()
+    private IEnumerator PauseTrailRoutine()
     {
         isPaused = true;
         isDrawing = false;

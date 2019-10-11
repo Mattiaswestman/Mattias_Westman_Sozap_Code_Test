@@ -91,6 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3536271830625585244}
   - component: {fileID: 485683895264811205}
+  - component: {fileID: 183577244609728175}
   - component: {fileID: 4123178580205051809}
   - component: {fileID: 8904640891151354186}
   - component: {fileID: 2319067656237841884}
@@ -143,6 +144,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &183577244609728175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747992979523248716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e825067e40c14145a99717ff6e8cf27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mySpaceshipTransform: {fileID: 2968152723403527863}
+  startPositionRectTransform: {fileID: 0}
 --- !u!114 &4123178580205051809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -155,14 +170,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0d244ee4fba304aa1a33963228ff05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mySpaceship: {fileID: 1987625903517219173}
+  mySpaceshipTransform: {fileID: 2968152723403527863}
   UpKey: 0
   DownKey: 0
   RightKey: 0
   LeftKey: 0
   moveSpeed: 3
   turnSpeed: 150
-  canMove: 1
 --- !u!114 &8904640891151354186
 MonoBehaviour:
   m_ObjectHideFlags: 0

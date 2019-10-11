@@ -16,7 +16,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] private float cooldown = 0f;
 
     private bool isOnCooldown = false;
-    public bool IsOnCooldown { get { return isOnCooldown; } }
+    public bool IsOnCooldown { get { return isOnCooldown; } set { isOnCooldown = value; } }
 
 
     private void Awake()

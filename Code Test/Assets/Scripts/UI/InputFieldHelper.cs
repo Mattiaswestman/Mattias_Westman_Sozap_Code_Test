@@ -25,7 +25,7 @@ public class InputFieldHelper : MonoBehaviour
     {
         for(int i = 0; i < textToModify.Length; i++)
         {
-            UIManager.instance.SetTextAsString(textToModify[i], input);
+            UIManager.instance.SetTextComponentToString(textToModify[i], input);
         }
         
         UIManager.instance.ToggleUIObject(gameObject);

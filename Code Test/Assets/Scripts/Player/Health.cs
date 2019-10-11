@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
     private Invincibility myInvincibility = null;
 
     private bool isAlive = true;
-    public bool IsAlive { get { return isAlive; } }
+    public bool IsAlive { get { return isAlive; } set { isAlive = value; } }
 
 
     private void Awake()
@@ -20,7 +20,17 @@ public class Health : MonoBehaviour
             return;
         }
     }
-    
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            isAlive = false;
+
+            gameObject.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "LevelBoundary")

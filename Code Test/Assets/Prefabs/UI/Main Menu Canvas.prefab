@@ -967,7 +967,7 @@ GameObject:
   - component: {fileID: 5298642118703829486}
   - component: {fileID: 5298642118703829457}
   m_Layer: 5
-  m_Name: Title Menu Canvas
+  m_Name: Main Menu Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1172,7 +1172,7 @@ PrefabInstance:
     - target: {fileID: 507971316480113763, guid: bb12f2c84f684a44cab2d06d91ea3db9,
         type: 3}
       propertyPath: m_Name
-      value: Player Three Menu Panel
+      value: Player Three Main Menu Panel
       objectReference: {fileID: 0}
     - target: {fileID: 2035093845411347604, guid: bb12f2c84f684a44cab2d06d91ea3db9,
         type: 3}
@@ -1362,7 +1362,7 @@ PrefabInstance:
     - target: {fileID: 7636173805018199664, guid: af5d3c122733749438e285b5e42e6650,
         type: 3}
       propertyPath: m_Name
-      value: Player Four Menu Panel
+      value: Player Four Main Menu Panel
       objectReference: {fileID: 0}
     - target: {fileID: 8271869755652142727, guid: af5d3c122733749438e285b5e42e6650,
         type: 3}
@@ -1552,7 +1552,7 @@ PrefabInstance:
     - target: {fileID: 7636173805018199664, guid: af5d3c122733749438e285b5e42e6650,
         type: 3}
       propertyPath: m_Name
-      value: Player Two Menu Panel
+      value: Player Two Main Menu Panel
       objectReference: {fileID: 0}
     - target: {fileID: 8271869755652142727, guid: af5d3c122733749438e285b5e42e6650,
         type: 3}
@@ -1742,7 +1742,7 @@ PrefabInstance:
     - target: {fileID: 7636173805018199664, guid: af5d3c122733749438e285b5e42e6650,
         type: 3}
       propertyPath: m_Name
-      value: Player One Menu Panel
+      value: Player One Main Menu Panel
       objectReference: {fileID: 0}
     - target: {fileID: 8271869755652142727, guid: af5d3c122733749438e285b5e42e6650,
         type: 3}
