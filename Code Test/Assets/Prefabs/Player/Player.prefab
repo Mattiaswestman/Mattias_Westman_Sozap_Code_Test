@@ -175,7 +175,7 @@ MonoBehaviour:
   DownKey: 0
   RightKey: 0
   LeftKey: 0
-  moveSpeed: 3
+  moveSpeed: 2
   turnSpeed: 150
 --- !u!114 &8904640891151354186
 MonoBehaviour:
@@ -201,11 +201,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2a02660ba3be2449240bb618b47da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconRenderer: {fileID: 3830361497726948175}
   projectilePrefab: {fileID: 7759410383511286823, guid: 931a444d6b69a3d41a77241a61871aea,
     type: 3}
   projectileSceneParent: {fileID: 0}
   projectileOrigin: {fileID: 5289564981298067526}
+  iconRenderer: {fileID: 3830361497726948175}
   projectileSpeed: 300
   cooldown: 2
 --- !u!114 &-6303598286420101538
@@ -221,6 +221,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   iconRenderer: {fileID: 2811623772066362461}
+  spaceshipRenderers:
+  - {fileID: 1271796646644085887}
+  - {fileID: 7211804134968396032}
+  - {fileID: 1755233618856357318}
   duration: 3
   cooldown: 3
 --- !u!114 &2707352976831731954
@@ -255,6 +259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 091a9fa1b5bd8f04f9716cc96aafcf21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreRenderer: {fileID: 2258274026883766210}
   scoreText: {fileID: 6630043490707638533}
 --- !u!1 &1426145751880015929
 GameObject:
@@ -294,7 +299,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1426145751880015929}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -440,7 +445,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2276734332995196187}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -640,7 +645,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5955078530964103507}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

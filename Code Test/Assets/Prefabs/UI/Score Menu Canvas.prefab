@@ -611,6 +611,7 @@ GameObject:
   - component: {fileID: 2927601702511160890}
   - component: {fileID: 2927601702834861189}
   - component: {fileID: 2927601702834861190}
+  - component: {fileID: 6152073048438758977}
   m_Layer: 5
   m_Name: Score Menu Canvas
   m_TagString: Untagged
@@ -698,6 +699,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!225 &6152073048438758977
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2927601702834861191}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2927601703069239104
 GameObject:
   m_ObjectHideFlags: 0
@@ -1284,7 +1297,7 @@ PrefabInstance:
     - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
@@ -1484,7 +1497,7 @@ PrefabInstance:
     - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
@@ -1684,7 +1697,7 @@ PrefabInstance:
     - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}

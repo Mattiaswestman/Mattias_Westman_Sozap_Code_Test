@@ -60,42 +60,24 @@ public class Trail : MonoBehaviour
         trail.transform.SetParent(trailSceneParent);
 
         LineRenderer trailRenderer = null;
-        try
-        {
-            trailRenderer = trail.GetComponent<LineRenderer>();
+        trailRenderer = trail.GetComponent<LineRenderer>();
 
-            trailRenderer.startWidth = trailRenderer.endWidth = lineWidth;
-            trailRenderer.startColor = trailRenderer.endColor = lineColor;
-            trailRenderer.sharedMaterial = trailMaterial;
+        trailRenderer.startWidth = trailRenderer.endWidth = lineWidth;
+        trailRenderer.startColor = trailRenderer.endColor = lineColor;
+        trailRenderer.sharedMaterial = trailMaterial;
 
-            trailRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            trailRenderer.receiveShadows = false;
-        }
-        catch(MissingReferenceException exception)
-        {
-            Debug.LogError(exception);
-            isDrawing = false;
-            StopCoroutine(drawRoutine);
-        }
+        trailRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        trailRenderer.receiveShadows = false;
 
         EdgeCollider2D trailCollider = null;
-        try
-        {
-            trailCollider = trail.GetComponent<EdgeCollider2D>();
+        trailCollider = trail.GetComponent<EdgeCollider2D>();
 
-            trailCollider.isTrigger = true;
-            trailCollider.edgeRadius = lineWidth / 2;
-        }
-        catch(MissingReferenceException exception)
-        {
-            Debug.LogError(exception);
-            isDrawing = false;
-            StopCoroutine(drawRoutine);
-        }
-
+        trailCollider.isTrigger = true;
+        trailCollider.edgeRadius = lineWidth / 2;
+        
         var points = new List<Vector2>();
 
-        while(timer < totalDrawTime && isDrawing)
+        while(timer < totalDrawTime)
         {
             points.Add(trailOrigin.position);
             trailRenderer.positionCount = points.Count;
@@ -106,14 +88,11 @@ public class Trail : MonoBehaviour
                 trailCollider.points = points.ToArray();
             }
 
-            timer += Time.deltaTime;
-            yield return null;
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
-
-        if(!isPaused)
-        {
-            pauseRoutine = StartCoroutine(PauseTrailRoutine());
-        }
+            
+        pauseRoutine = StartCoroutine(PauseTrailRoutine());
     }
 
     private IEnumerator PauseTrailRoutine()

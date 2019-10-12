@@ -8,42 +8,32 @@ public class UIManager : MonoBehaviour
     public static UIManager instance = null;
 
     [Header("Canvases")]
-    [SerializeField] public Canvas mainMenuCanvas = null;
-    [SerializeField] public Canvas scoreMenuCanvas = null;
-    [SerializeField] public Canvas countdownCanvas = null;
-    /*
-    [Header("Menu Panels")]
-    [SerializeField] private GameObject playerOneMenuPanel = null;
-    [SerializeField] private GameObject playerTwoMenuPanel = null;
-    [SerializeField] private GameObject playerThreeMenuPanel = null;
-    [SerializeField] private GameObject playerFourMenuPanel = null;
-
-    [Header("Score Panels")]
-    [SerializeField] private GameObject playerOneScorePanel = null;
-    [SerializeField] private GameObject playerTwoScorePanel = null;
-    [SerializeField] private GameObject playerThreeScorePanel = null;
-    [SerializeField] private GameObject playerFourScorePanel = null;
-
-    [Header("Player Score")]
-    [SerializeField] public TextMeshProUGUI playerOneScoreText = null;
-    [SerializeField] public TextMeshProUGUI playerTwoScoreText = null;
-    [SerializeField] public TextMeshProUGUI playerThreeScoreText = null;
-    [SerializeField] public TextMeshProUGUI playerFourScoreText = null;
-    */
+    public Canvas mainMenuCanvas = null;
+    public Canvas scoreMenuCanvas = null;
+    public Canvas countdownCanvas = null;
+    
     [Header("Player UI")]
-    [SerializeField] private GameObject[] playerMainMenuPanels = null;
+    [SerializeField] private GameObject[] mainMenuPlayerPanels = null;
     [Space(10)]
-    [SerializeField] private GameObject[] playerScoreMenuPanels = null;
+    [SerializeField] private GameObject[] scoreMenuPlayerPanels = null;
     [Space(10)]
     public TextMeshProUGUI[] playerScoreTexts = null;
+    [Space(10)]
+    public GameObject[] playerWinnerTexts = null;
+
+    [Header("Countdown")]
+    [SerializeField] private Animator countdownAnimator = null;
+    [SerializeField] private Animation[] countdownAnimations = null;
 
     [Header("Various UI Elements")]
-    [SerializeField] public TextMeshProUGUI playerCountText = null;
-    [SerializeField] public GameObject countdownText = null;
-    [SerializeField] public GameObject nextRoundButton = null;
-    [SerializeField] public GameObject menuButton = null;
-
+    public TextMeshProUGUI playerCountText = null;
+    public GameObject nextRoundButton = null;
+    public GameObject menuButton = null;
+    
     private Canvas activeCanvas = null;
+    private Coroutine fadeInRoutine = null;
+    private Coroutine fadeOutRoutine = null;
+    private Coroutine countdownRoutine = null;
 
 
     private void Awake()
@@ -67,51 +57,53 @@ public class UIManager : MonoBehaviour
     private void InitializeUI()
     {
         mainMenuCanvas.gameObject.SetActive(true);
-        EnableCanvas(mainMenuCanvas);
+        SetCanvasEnabled(mainMenuCanvas, true);
         scoreMenuCanvas.gameObject.SetActive(true);
-        DisableCanvas(scoreMenuCanvas);
+        SetCanvasEnabled(scoreMenuCanvas, false);
         countdownCanvas.gameObject.SetActive(true);
-        DisableCanvas(countdownCanvas);
+        SetCanvasEnabled(countdownCanvas, false);
 
         activeCanvas = mainMenuCanvas;
     }
 
     public void OpenMainMenu()
     {
-        // Disable active canvas.
-        DisableCanvas(activeCanvas);
-        // Fade in main menu.
+        activeCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        SetCanvasEnabled(activeCanvas, false);
+        
         activeCanvas = mainMenuCanvas;
-        EnableCanvas(activeCanvas);
+        SetCanvasEnabled(activeCanvas, true);
+
+        fadeInRoutine = StartCoroutine(FadeInRoutine(activeCanvas, 0.5f));
     }
 
     public void OpenScoreMenu()
     {
-        // Disable active canvas.
-        DisableCanvas(activeCanvas);
-        // Fade in score menu.
+        activeCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        SetCanvasEnabled(activeCanvas, false);
+        
         activeCanvas = scoreMenuCanvas;
-        EnableCanvas(activeCanvas);
+        SetCanvasEnabled(activeCanvas, true);
+
+        fadeInRoutine = StartCoroutine(FadeInRoutine(activeCanvas, 0.5f));
     }
 
     public void StartCountdown(int roundNumber)
     {
-        // Fade out active canvas.
-        // Disable active canvas.
-        DisableCanvas(activeCanvas);
-        // Set countdown canvas active.
-        activeCanvas = countdownCanvas;
-        EnableCanvas(activeCanvas);
-        
-        // *Run countdown*
+        fadeOutRoutine = StartCoroutine(FadeOutRoutine(activeCanvas, 0.25f));
 
-        // Disable countdown canvas.
-        DisableCanvas(activeCanvas);
+        activeCanvas = countdownCanvas;
+        activeCanvas.GetComponent<CanvasGroup>().alpha = 1f;
+
+        countdownRoutine = StartCoroutine(CountdownRoutine(roundNumber, 5f));
     }
 
-    public void StartWinAnimation()
+    // TODO: Rewrite?
+    //
+    public void SetPlayerHasWon(int playerIndex, bool value)
     {
-
+        scoreMenuPlayerPanels[playerIndex].GetComponentInChildren<Animator>().SetBool("hasWon", value);
+        playerWinnerTexts[playerIndex].SetActive(value);
     }
 
     public void SetPlayerUIEnabled(int playerCount)
@@ -119,27 +111,27 @@ public class UIManager : MonoBehaviour
         switch(playerCount)
         {
             case 2:
-                DisableUIObject(playerMainMenuPanels[2]);
-                DisableUIObject(playerMainMenuPanels[3]);
+                SetUIObjectActive(mainMenuPlayerPanels[2], false);
+                SetUIObjectActive(mainMenuPlayerPanels[3], false);
 
-                DisableUIObject(playerScoreMenuPanels[2]);
-                DisableUIObject(playerScoreMenuPanels[3]);
+                SetUIObjectActive(scoreMenuPlayerPanels[2], false);
+                SetUIObjectActive(scoreMenuPlayerPanels[3], false);
                 break;
 
             case 3:
-                EnableUIObject(playerMainMenuPanels[2]);
-                DisableUIObject(playerMainMenuPanels[3]);
+                SetUIObjectActive(mainMenuPlayerPanels[2], true);
+                SetUIObjectActive(mainMenuPlayerPanels[3], false);
 
-                EnableUIObject(playerScoreMenuPanels[2]);
-                DisableUIObject(playerScoreMenuPanels[3]);
+                SetUIObjectActive(scoreMenuPlayerPanels[2], true);
+                SetUIObjectActive(scoreMenuPlayerPanels[3], false);
                 break;
 
             case 4:
-                EnableUIObject(playerMainMenuPanels[2]);
-                EnableUIObject(playerMainMenuPanels[3]);
+                SetUIObjectActive(mainMenuPlayerPanels[2], true);
+                SetUIObjectActive(mainMenuPlayerPanels[3], true);
 
-                EnableUIObject(playerScoreMenuPanels[2]);
-                EnableUIObject(playerScoreMenuPanels[3]);
+                SetUIObjectActive(scoreMenuPlayerPanels[2], true);
+                SetUIObjectActive(scoreMenuPlayerPanels[3], true);
                 break;
 
             default:
@@ -155,31 +147,21 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void EnableCanvas(Canvas canvas)
+    public void SetCanvasEnabled(Canvas canvas, bool value)
     {
-        canvas.gameObject.GetComponent<Canvas>().enabled = true;
+        canvas.gameObject.GetComponent<Canvas>().enabled = value;
     }
-
-    public void DisableCanvas(Canvas canvas)
+    
+    public void SetUIObjectActive(GameObject uiObject, bool value)
     {
-        canvas.gameObject.GetComponent<Canvas>().enabled = false;
+        uiObject.SetActive(value);
     }
-
-    public void EnableUIObject(GameObject uiObject)
-    {
-        uiObject.SetActive(true);
-    }
-
-    public void DisableUIObject(GameObject uiObject)
-    {
-        uiObject.SetActive(false);
-    }
-
+    
     public void ToggleUIObject(GameObject uiObject)
     {
         uiObject.SetActive(!uiObject.activeSelf);
     }
-
+    
     public void SetTextComponentToString(TextMeshProUGUI textComponent, string text)
     {
         textComponent.SetText(text);
@@ -199,4 +181,69 @@ public class UIManager : MonoBehaviour
     {
         textComponent.SetText(number.ToString());
     }
+
+    private IEnumerator FadeInRoutine(Canvas fadeInCanvas, float fadeDuration)
+    {
+        var timer = 0f;
+
+        while(timer < fadeDuration)
+        {
+            float proportionCompleted = timer / fadeDuration;
+
+            float alphaThisFrame = Mathf.Lerp(0f, 1f, proportionCompleted);
+
+            fadeInCanvas.GetComponent<CanvasGroup>().alpha = alphaThisFrame;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        fadeInCanvas.GetComponent<CanvasGroup>().alpha = 1f;
+    }
+    
+    private IEnumerator FadeOutRoutine(Canvas fadeOutCanvas, float fadeDuration)
+    {
+        var timer = 0f;
+
+        while(timer < fadeDuration)
+        {
+            float proportionCompleted = timer / fadeDuration;
+
+            float alphaThisFrame = Mathf.Lerp(1f, 0f, proportionCompleted);
+
+            fadeOutCanvas.GetComponent<CanvasGroup>().alpha = alphaThisFrame;
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        fadeOutCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+    }
+
+    private IEnumerator CountdownRoutine(int roundNumber, float duration)
+    {
+        float timer = duration;
+        
+        while(timer >= 0f)
+        {
+            Debug.Log(timer);
+
+            timer -= Time.deltaTime;
+            yield return null;//new WaitForSeconds(animationTime);
+        }
+
+        countdownCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        GameManager.instance.HasCountdownFinished = true;
+    }
 }
+
+/*
+if(roundNumber == 1)
+        {
+            roundText = "First to 150p Wins";
+        }
+        else
+        {
+            roundText = $"Round {roundNumber}";
+        } 
+*/

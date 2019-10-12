@@ -6,11 +6,11 @@ using TMPro;
 public class Weapon : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private SpriteRenderer iconRenderer = null;
     [SerializeField] private GameObject projectilePrefab = null;
     [SerializeField] private Transform projectileSceneParent = null;
     [SerializeField] private Transform projectileOrigin = null;
-    
+    public SpriteRenderer iconRenderer = null;
+
     [Space(20)]
     [SerializeField] private float projectileSpeed = 0f;
     [SerializeField] private float cooldown = 0f;
@@ -47,19 +47,14 @@ public class Weapon : MonoBehaviour
         StartCoroutine("CooldownRoutine");
     }
     
-    public void UpdateRoundScore()
-    {
-        
-    }
-
     IEnumerator CooldownRoutine()
     {
-        iconRenderer.color = Color.blue;
         isOnCooldown = true;
+        iconRenderer.enabled = false;
 
         yield return new WaitForSeconds(cooldown);
 
-        iconRenderer.color = Color.white;
+        iconRenderer.enabled = true;
         isOnCooldown = false;
     }
 }

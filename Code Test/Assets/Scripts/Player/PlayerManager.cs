@@ -82,12 +82,17 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayerIsControllable(bool value)
     {
         myInputManager.IsControllable = value;
+
+        myRoundScore.scoreRenderer.enabled = value;
     }
 
     public void SetPlayerCanMove(bool value)
     {
         myInputManager.CanMove = value;
         myTrail.IsPaused = !value;
+
+        myWeapon.iconRenderer.enabled = value;
+        myInvincibility.iconRenderer.enabled = value;
     }
 
     public void ResetPlayer()
@@ -104,13 +109,16 @@ public class PlayerManager : MonoBehaviour
         myHealth.IsAlive = true;
 
         myWeapon.IsOnCooldown = false;
+        myWeapon.iconRenderer.enabled = false;
 
         myInvincibility.IsActive = false;
         myInvincibility.IsOnCooldown = false;
+        myInvincibility.iconRenderer.enabled = false;
 
         myTrail.IsDrawing = false;
         myTrail.IsPaused = true;
 
         myRoundScore.ResetRoundScore();
+        myRoundScore.scoreRenderer.enabled = false;
     }
 }

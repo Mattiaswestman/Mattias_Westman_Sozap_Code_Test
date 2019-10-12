@@ -5,7 +5,8 @@ using UnityEngine;
 public class Invincibility : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] SpriteRenderer iconRenderer = null;
+    public SpriteRenderer iconRenderer = null;
+    [SerializeField] private SpriteRenderer[] spaceshipRenderers = null;
 
     [Space(20)]
     [SerializeField] private float duration = 0f;
@@ -16,33 +17,57 @@ public class Invincibility : MonoBehaviour
     private bool isOnCooldown = false;
     public bool IsOnCooldown { get { return isOnCooldown; } set { isOnCooldown = value; } }
 
+    private Coroutine invincibilityRoutine = null;
+
 
     public void ActivateInvincibility()
     {
-        StartCoroutine("InvincibilityRoutine");
+        invincibilityRoutine = StartCoroutine(InvincibilityRoutine(duration));
     }
     
-    IEnumerator InvincibilityRoutine()
+    private void SetAlpha(SpriteRenderer spriteRenderer, float newAlpha)
     {
-        isActive = true;
-        iconRenderer.color = Color.red;
+        Color temp = spriteRenderer.color;
+        temp.a = newAlpha;
+        spriteRenderer.color = temp;
+    }
 
-        yield return new WaitForSeconds(duration);
+    IEnumerator InvincibilityRoutine(float duration)
+    {
+        var timer = 0f;
+
+        isActive = true;
+        iconRenderer.enabled = false;
+
+        while(timer < duration)
+        {
+            float alphaThisFrame = (Mathf.Sin(Time.time * 10f) + 1f) * 0.5f;
+
+            for(int i = 0; i < spaceshipRenderers.Length; i++)
+            {
+                SetAlpha(spaceshipRenderers[i], alphaThisFrame);
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        
+        for(int i = 0; i < spaceshipRenderers.Length; i++)
+        {
+            SetAlpha(spaceshipRenderers[i], 1f);
+        }
 
         isActive = false;
-
         StartCoroutine("CooldownRoutine");
     }
 
     IEnumerator CooldownRoutine()
     {
-        iconRenderer.color = Color.blue;
-        
         isOnCooldown = true;
 
         yield return new WaitForSeconds(cooldown);
-
-        iconRenderer.color = Color.white;
+        
+        iconRenderer.enabled = true;
         isOnCooldown = false;
     }
 }

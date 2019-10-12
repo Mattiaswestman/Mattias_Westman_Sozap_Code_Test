@@ -6,20 +6,21 @@ using TMPro;
 public class RoundScore : MonoBehaviour
 {
     [Header("References")]
+    public MeshRenderer scoreRenderer = null;
     [SerializeField] private TextMeshPro scoreText = null;
 
-    private int currentRoundScore = 0;
-    public int CurrentRoundScore { get { return currentRoundScore; } }
+    private int currentRoundPoints = 0;
+    public int CurrentRoundPoints { get { return currentRoundPoints; } }
 
     public void UpdateRoundScore()
     {
-        currentRoundScore += 10;
-        UIManager.instance.SetTextComponentToInt(scoreText, currentRoundScore);
+        currentRoundPoints += 10;
+        UIManager.instance.SetTextComponentToInt(scoreText, currentRoundPoints);
     }
 
     public void ResetRoundScore()
     {
-        currentRoundScore = 0;
+        currentRoundPoints = 0;
         UIManager.instance.SetTextComponentToInt(scoreText, 0);
     }
 }

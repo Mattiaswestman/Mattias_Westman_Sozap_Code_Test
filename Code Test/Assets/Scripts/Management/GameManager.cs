@@ -4,20 +4,37 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance = null;
+
     [Header("References")]
     [SerializeField] private Transform projectilesSceneParent = null;
     [SerializeField] private Transform trailsSceneParent = null;
     [SerializeField] private GameObject[] players = new GameObject[4];
 
     private List<GameObject> activePlayers = new List<GameObject>();
-    private List<int> playerScore = new List<int>();
+    private List<int> playerPoints = new List<int>();
 
     private int playerCount = 2;
     private int currentRoundNumber = 1;
 
-    private bool isGameRoundStarted = false;
+    private bool hasCountdownFinished = false;
+    public bool HasCountdownFinished { set { hasCountdownFinished = value; } }
+    private bool hasGameRoundStarted = false;
     private bool isGameOver = false;
 
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else if(instance != this)
+        {
+            enabled = false;
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -28,7 +45,15 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(isGameRoundStarted)
+        if(hasCountdownFinished)
+        {
+            hasCountdownFinished = false;
+
+            SetPlayersCanMove(true);
+
+            hasGameRoundStarted = true;
+        }
+        if(hasGameRoundStarted)
         {
             CheckIfRoundOver();
         }
@@ -50,7 +75,7 @@ public class GameManager : MonoBehaviour
 
         if(playersAlive <= 1)
         {
-            isGameRoundStarted = false;
+            hasGameRoundStarted = false;
             EndRound();
         }
     }
@@ -65,15 +90,15 @@ public class GameManager : MonoBehaviour
             if(players[i].activeSelf)
             {
                 activePlayers.Add(players[i]);
-                playerScore.Add(0);
+                playerPoints.Add(0);
             }
         }
         
         StartRound();
     }
 
-    // Initializes and starts a new game round. When started, the game logic is controlled by the Update() function.
-    // Is called from StartGame() or from the "Next round" button on the score menu. 
+    // Initializes and starts a new game round. When countdown is started the game logic is handled by the Update() function.
+    // Is called from StartGame() or from the "Next round" button on the score menu.
     //
     public void StartRound()
     {
@@ -83,9 +108,9 @@ public class GameManager : MonoBehaviour
 
         UIManager.instance.StartCountdown(currentRoundNumber);
 
-        SetPlayersCanMove(true);
+        //SetPlayersCanMove(true);
 
-        isGameRoundStarted = true;
+        //hasGameRoundStarted = true;
     }
 
     // Disables player movement, updates score and checks for a winner. Will lead to either a new game round or end of game.
@@ -98,12 +123,12 @@ public class GameManager : MonoBehaviour
         DestroyChildObjects(projectilesSceneParent);
 
         UpdateScore();
-        UIManager.instance.UpdateUIScore(playerScore);
+        UIManager.instance.UpdateUIScore(playerPoints);
 
         if(isGameOver)
         {
-            UIManager.instance.DisableUIObject(UIManager.instance.nextRoundButton);
-            UIManager.instance.EnableUIObject(UIManager.instance.menuButton);
+            UIManager.instance.SetUIObjectActive(UIManager.instance.nextRoundButton, false);
+            UIManager.instance.SetUIObjectActive(UIManager.instance.menuButton, true);
         }
 
         UIManager.instance.OpenScoreMenu();
@@ -118,42 +143,53 @@ public class GameManager : MonoBehaviour
 
     private void ResetRound()
     {
-        DestroyChildObjects(trailsSceneParent);
-
         for(int i = 0; i < activePlayers.Count; i++)
         {
             activePlayers[i].GetComponent<PlayerManager>().ResetPlayer();
+            activePlayers[i].GetComponent<Trail>().StopAllCoroutines();
         }
+
+        DestroyChildObjects(trailsSceneParent);
     }
 
     private void ResetGame()
     {
         ResetRound();
 
+        for(int playerIndex = 0; playerIndex < activePlayers.Count; playerIndex++)
+        {
+            UIManager.instance.SetPlayerHasWon(playerIndex, false);
+        }
+
         activePlayers.Clear();
-        playerScore.Clear();
+        playerPoints.Clear();
 
-        UIManager.instance.DisableUIObject(UIManager.instance.menuButton);
-        UIManager.instance.EnableUIObject(UIManager.instance.nextRoundButton);
-
+        UIManager.instance.SetUIObjectActive(UIManager.instance.menuButton, false);
+        UIManager.instance.SetUIObjectActive(UIManager.instance.nextRoundButton, true);
+        
         currentRoundNumber = 1;
         isGameOver = false;
+    }
+
+    private void StartCountdown(int roundNumber)
+    {
+        UIManager.instance.StartCountdown(currentRoundNumber);
     }
 
     private void UpdateScore()
     {
         for(int i = 0; i < activePlayers.Count; i++)
         {
-            playerScore[i] += activePlayers[i].GetComponent<RoundScore>().CurrentRoundScore;
+            playerPoints[i] += activePlayers[i].GetComponent<RoundScore>().CurrentRoundPoints;
 
             if(activePlayers[i].GetComponent<Health>().IsAlive)
             {
-                playerScore[i] += 30;
+                playerPoints[i] += 30;
             }
 
-            if(playerScore[i] >= 150)
+            if(playerPoints[i] >= 150)
             {
-                UIManager.instance.StartWinAnimation();
+                UIManager.instance.SetPlayerHasWon(i, true);
                 isGameOver = true;
             }
         }
@@ -215,7 +251,7 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < activePlayers.Count; i++)
         {
-            activePlayers[i].GetComponent<InputManager>().IsControllable = value;
+            activePlayers[i].GetComponent<PlayerManager>().SetPlayerIsControllable(value);
         }
     }
 
@@ -223,8 +259,7 @@ public class GameManager : MonoBehaviour
     {
         for(int i = 0; i < activePlayers.Count; i++)
         {
-            activePlayers[i].GetComponent<InputManager>().CanMove = value;
-            activePlayers[i].GetComponent<Trail>().IsPaused = !value;
+            activePlayers[i].GetComponent<PlayerManager>().SetPlayerCanMove(value);
         }
     }
 
