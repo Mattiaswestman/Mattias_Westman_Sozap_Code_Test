@@ -25,11 +25,21 @@ public class Invincibility : MonoBehaviour
         invincibilityRoutine = StartCoroutine(InvincibilityRoutine(duration));
     }
     
-    private void SetAlpha(SpriteRenderer spriteRenderer, float newAlpha)
+    public void SetAlpha(SpriteRenderer spriteRenderer, float newAlpha)
     {
         Color temp = spriteRenderer.color;
         temp.a = newAlpha;
         spriteRenderer.color = temp;
+    }
+
+    public void SetShipAlpha(float newAlpha)
+    {
+        for(int i = 0; i < spaceshipRenderers.Length; i++)
+        {
+            Color temp = spaceshipRenderers[i].color;
+            temp.a = newAlpha;
+            spaceshipRenderers[i].color = temp;
+        }
     }
 
     IEnumerator InvincibilityRoutine(float duration)
@@ -45,7 +55,7 @@ public class Invincibility : MonoBehaviour
 
             for(int i = 0; i < spaceshipRenderers.Length; i++)
             {
-                SetAlpha(spaceshipRenderers[i], alphaThisFrame);
+                SetShipAlpha(alphaThisFrame);
             }
 
             timer += Time.deltaTime;
@@ -54,7 +64,7 @@ public class Invincibility : MonoBehaviour
         
         for(int i = 0; i < spaceshipRenderers.Length; i++)
         {
-            SetAlpha(spaceshipRenderers[i], 1f);
+            SetShipAlpha(1f);
         }
 
         isActive = false;

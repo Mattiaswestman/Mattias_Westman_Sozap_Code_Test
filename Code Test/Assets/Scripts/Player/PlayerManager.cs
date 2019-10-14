@@ -91,7 +91,9 @@ public class PlayerManager : MonoBehaviour
         myInputManager.CanMove = value;
         myTrail.IsPaused = !value;
 
+        myWeapon.StopAllCoroutines();
         myWeapon.iconRenderer.enabled = value;
+        myInvincibility.StopAllCoroutines();
         myInvincibility.iconRenderer.enabled = value;
     }
 
@@ -113,6 +115,7 @@ public class PlayerManager : MonoBehaviour
 
         myInvincibility.IsActive = false;
         myInvincibility.IsOnCooldown = false;
+        myInvincibility.SetShipAlpha(1f);
         myInvincibility.iconRenderer.enabled = false;
 
         myTrail.IsDrawing = false;

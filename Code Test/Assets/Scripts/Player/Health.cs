@@ -42,7 +42,7 @@ public class Health : MonoBehaviour
         if(collision.tag == "PlayerTrail" && !myInvincibility.IsActive)
         {
             isAlive = false;
-
+            
             gameObject.SetActive(false);
         }
     }

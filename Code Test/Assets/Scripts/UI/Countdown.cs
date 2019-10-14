@@ -10,6 +10,13 @@ public class Countdown : MonoBehaviour
 
     private Coroutine countdownRoutine = null;
 
+    private bool isCountdownOver = false;
+
+    public void UpdateCountdownText()
+    {
+
+    }
+
     public void StartCountdown(int roundNumber, float duration)
     {
         countdownRoutine = StartCoroutine(CountdownRoutine(roundNumber, duration));
@@ -17,28 +24,16 @@ public class Countdown : MonoBehaviour
 
     private IEnumerator CountdownRoutine(int roundNumber, float duration)
     {
-        string text = default;
-
-        if(roundNumber == 1)
-        {
-            text = "First to 150p Wins";
-        }
-        else
-        {
-            text = $"Round {roundNumber}";
-        }
-
         float timer = duration;
 
         while(timer >= 0f)
         {
-            
-
 
             timer -= Time.deltaTime;
             yield return null;
         }
 
-        GameManager.instance.HasCountdownFinished = true;
+        //gameCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        isCountdownOver = true;
     }
 }

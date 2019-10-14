@@ -7,10 +7,12 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance = null;
 
+    [SerializeField] private Animation countdownAnimation = null;
+
     [Header("Canvases")]
     public Canvas mainMenuCanvas = null;
     public Canvas scoreMenuCanvas = null;
-    public Canvas countdownCanvas = null;
+    public Canvas gameCanvas = null;
     
     [Header("Player UI")]
     [SerializeField] private GameObject[] mainMenuPlayerPanels = null;
@@ -19,22 +21,26 @@ public class UIManager : MonoBehaviour
     [Space(10)]
     public TextMeshProUGUI[] playerScoreTexts = null;
     [Space(10)]
+    public PointsBar[] playerPointsBars = null;
+    [Space(10)]
     public GameObject[] playerWinnerTexts = null;
-
-    [Header("Countdown")]
-    [SerializeField] private Animator countdownAnimator = null;
-    [SerializeField] private Animation[] countdownAnimations = null;
 
     [Header("Various UI Elements")]
     public TextMeshProUGUI playerCountText = null;
+    public TextMeshProUGUI countdownText = null;
     public GameObject nextRoundButton = null;
     public GameObject menuButton = null;
     
     private Canvas activeCanvas = null;
+    
+
     private Coroutine fadeInRoutine = null;
     private Coroutine fadeOutRoutine = null;
     private Coroutine countdownRoutine = null;
 
+    private bool isCountdownOver = false;
+    public bool IsCountdownOver { get { return isCountdownOver; } set { isCountdownOver = value; } }
+    private bool isScoreMenuLoaded = false;
 
     private void Awake()
     {
@@ -53,15 +59,28 @@ public class UIManager : MonoBehaviour
     {
         InitializeUI();
     }
-    
+
+    private void Update()
+    {
+        if(isScoreMenuLoaded)
+        {
+            isScoreMenuLoaded = false;
+
+            for(int i = 0; i < GameManager.instance.ActivePlayers.Count; i++)
+            {
+                playerPointsBars[i].UpdatePointsBar(int.Parse(playerScoreTexts[i].text));
+            }
+        }
+    }
+
     private void InitializeUI()
     {
         mainMenuCanvas.gameObject.SetActive(true);
         SetCanvasEnabled(mainMenuCanvas, true);
         scoreMenuCanvas.gameObject.SetActive(true);
         SetCanvasEnabled(scoreMenuCanvas, false);
-        countdownCanvas.gameObject.SetActive(true);
-        SetCanvasEnabled(countdownCanvas, false);
+        gameCanvas.gameObject.SetActive(true);
+        SetCanvasEnabled(gameCanvas, false);
 
         activeCanvas = mainMenuCanvas;
     }
@@ -92,10 +111,11 @@ public class UIManager : MonoBehaviour
     {
         fadeOutRoutine = StartCoroutine(FadeOutRoutine(activeCanvas, 0.25f));
 
-        activeCanvas = countdownCanvas;
+        activeCanvas = gameCanvas;
+        SetCanvasEnabled(activeCanvas, true);
         activeCanvas.GetComponent<CanvasGroup>().alpha = 1f;
 
-        countdownRoutine = StartCoroutine(CountdownRoutine(roundNumber, 5f));
+        countdownRoutine = StartCoroutine(CountdownRoutine(roundNumber));
     }
 
     // TODO: Rewrite?
@@ -181,7 +201,7 @@ public class UIManager : MonoBehaviour
     {
         textComponent.SetText(number.ToString());
     }
-
+    
     private IEnumerator FadeInRoutine(Canvas fadeInCanvas, float fadeDuration)
     {
         var timer = 0f;
@@ -199,6 +219,11 @@ public class UIManager : MonoBehaviour
         }
 
         fadeInCanvas.GetComponent<CanvasGroup>().alpha = 1f;
+
+        if(fadeInCanvas == scoreMenuCanvas)
+        {
+            isScoreMenuLoaded = true;
+        }
     }
     
     private IEnumerator FadeOutRoutine(Canvas fadeOutCanvas, float fadeDuration)
@@ -220,30 +245,90 @@ public class UIManager : MonoBehaviour
         fadeOutCanvas.GetComponent<CanvasGroup>().alpha = 0f;
     }
 
-    private IEnumerator CountdownRoutine(int roundNumber, float duration)
+    private IEnumerator CountdownRoutine(int roundNumber)
     {
-        float timer = duration;
-        
-        while(timer >= 0f)
-        {
-            Debug.Log(timer);
+        string roundIntro = "";
 
-            timer -= Time.deltaTime;
-            yield return null;//new WaitForSeconds(animationTime);
+        if(roundNumber == 1)
+        {
+            roundIntro = "First to 150p Wins";
+        }
+        else
+        {
+            roundIntro = $"Round {roundNumber}";
         }
 
-        countdownCanvas.GetComponent<CanvasGroup>().alpha = 0f;
-        GameManager.instance.HasCountdownFinished = true;
+        for(int i = 0; i < 5; i++)
+        {
+            switch(i)
+            {
+                case 0:
+                    SetTextComponentToString(countdownText, roundIntro);
+                    countdownAnimation.Play("RoundIntro");
+                    break;
+
+                case 1:
+                    SetTextComponentToInt(countdownText, 3);
+                    countdownAnimation.Play("Three");
+                    break;
+
+                case 2:
+                    SetTextComponentToInt(countdownText, 2);
+                    countdownAnimation.Play("Two");
+                    break;
+                    
+                case 3:
+                    SetTextComponentToInt(countdownText, 1);
+                    countdownAnimation.Play("One");
+                    break;
+
+                case 4:
+                    SetTextComponentToString(countdownText, "Start");
+                    countdownAnimation.Play("Start");
+                    break;
+
+                default:
+                    break;
+            }
+            
+            while(countdownAnimation.isPlaying)
+            {
+                yield return null;
+            }
+        }
+
+        gameCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        isCountdownOver = true;
     }
 }
 
 /*
-if(roundNumber == 1)
+private IEnumerator CountdownRoutine(int roundNumber, float duration)
+    {
+        string roundIntro = "";
+
+        if(roundNumber == 1)
         {
-            roundText = "First to 150p Wins";
+            roundIntro = "First to 150p Wins";
         }
         else
         {
-            roundText = $"Round {roundNumber}";
-        } 
+            roundIntro = $"Round {roundNumber}";
+        }
+
+        SetTextComponentToString(countdownText, roundIntro);
+
+
+        float timer = duration;
+
+        while(timer >= 0f)
+        {
+
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+        
+        gameCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        GameManager.instance.HasCountdownFinished = true;
+    } 
 */

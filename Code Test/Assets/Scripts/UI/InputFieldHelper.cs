@@ -14,6 +14,12 @@ public class InputFieldHelper : MonoBehaviour
     private void Awake()
     {
         inputField = GetComponent<TMP_InputField>();
+        if(inputField == null)
+        {
+            Debug.LogError($"InputFieldHelper: No TMP_InputField component found on {gameObject.name}.");
+            enabled = false;
+            return;
+        }
     }
 
     private void Start()

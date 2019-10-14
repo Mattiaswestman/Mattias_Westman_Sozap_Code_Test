@@ -12,13 +12,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] players = new GameObject[4];
 
     private List<GameObject> activePlayers = new List<GameObject>();
+    public List<GameObject> ActivePlayers { get { return activePlayers; } }
     private List<int> playerPoints = new List<int>();
 
     private int playerCount = 2;
     private int currentRoundNumber = 1;
 
-    private bool hasCountdownFinished = false;
-    public bool HasCountdownFinished { set { hasCountdownFinished = value; } }
     private bool hasGameRoundStarted = false;
     private bool isGameOver = false;
 
@@ -45,9 +44,9 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(hasCountdownFinished)
+        if(UIManager.instance.IsCountdownOver)
         {
-            hasCountdownFinished = false;
+            UIManager.instance.IsCountdownOver = false;
 
             SetPlayersCanMove(true);
 
@@ -107,10 +106,6 @@ public class GameManager : MonoBehaviour
         SetPlayersIsControllable(true);
 
         UIManager.instance.StartCountdown(currentRoundNumber);
-
-        //SetPlayersCanMove(true);
-
-        //hasGameRoundStarted = true;
     }
 
     // Disables player movement, updates score and checks for a winner. Will lead to either a new game round or end of game.
@@ -118,6 +113,8 @@ public class GameManager : MonoBehaviour
     //
     private void EndRound()
     {
+        currentRoundNumber++;
+
         SetPlayersCanMove(false);
         SetPlayersIsControllable(false);
         DestroyChildObjects(projectilesSceneParent);
@@ -170,12 +167,7 @@ public class GameManager : MonoBehaviour
         currentRoundNumber = 1;
         isGameOver = false;
     }
-
-    private void StartCountdown(int roundNumber)
-    {
-        UIManager.instance.StartCountdown(currentRoundNumber);
-    }
-
+    
     private void UpdateScore()
     {
         for(int i = 0; i < activePlayers.Count; i++)
@@ -186,9 +178,10 @@ public class GameManager : MonoBehaviour
             {
                 playerPoints[i] += 30;
             }
-
+            
             if(playerPoints[i] >= 150)
             {
+                playerPoints[i] = 150;
                 UIManager.instance.SetPlayerHasWon(i, true);
                 isGameOver = true;
             }
@@ -263,11 +256,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void DestroyChildObjects(Transform sceneObject)
+    private void DestroyChildObjects(Transform sceneParentObject)
     {
         var children = new List<GameObject>();
 
-        foreach(Transform child in sceneObject)
+        foreach(Transform child in sceneParentObject)
         {
             children.Add(child.gameObject);
         }

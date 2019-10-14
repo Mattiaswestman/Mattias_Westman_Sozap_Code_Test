@@ -48,6 +48,11 @@ public class Trail : MonoBehaviour
         }
     }
     
+    public void RemoveTrailSection()
+    {
+
+    }
+
     private IEnumerator DrawTrailRoutine()
     {
         isDrawing = true;

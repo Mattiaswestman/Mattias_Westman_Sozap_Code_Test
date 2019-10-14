@@ -1129,11 +1129,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1622792030702467285}
     m_Modifications:
-    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_Name
-      value: Player Two Score Menu Panel
-      objectReference: {fileID: 0}
     - target: {fileID: 7384496198674197202, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1239,6 +1234,31 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_Name
+      value: Player Two Score Menu Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4546376784066177333, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1294,26 +1314,6 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cb3864947f93ee4891a2712dbe57d8b, type: 3}
 --- !u!224 &7547200089573795780 stripped
@@ -1329,11 +1329,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1622792030702467285}
     m_Modifications:
-    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_Name
-      value: Player Four Score Menu Panel
-      objectReference: {fileID: 0}
     - target: {fileID: 7384496198674197202, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1439,6 +1434,31 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_Name
+      value: Player Four Score Menu Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4546376784066177333, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1494,26 +1514,6 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cb3864947f93ee4891a2712dbe57d8b, type: 3}
 --- !u!224 &5558180526920171653 stripped
@@ -1529,11 +1529,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1622792030702467285}
     m_Modifications:
-    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_Name
-      value: Player Three Score Menu Panel
-      objectReference: {fileID: 0}
     - target: {fileID: 7384496198674197202, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1639,6 +1634,31 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_Name
+      value: Player Three Score Menu Panel
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4546376784066177333, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -1694,26 +1714,6 @@ PrefabInstance:
       propertyPath: m_textInfo.spaceCount
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 435060439699137020, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cb3864947f93ee4891a2712dbe57d8b, type: 3}
 --- !u!224 &3298522101148879109 stripped
@@ -1729,11 +1729,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1622792030702467285}
     m_Modifications:
-    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
-        type: 3}
-      propertyPath: m_Name
-      value: Player One Score Menu Panel
-      objectReference: {fileID: 0}
     - target: {fileID: 7384496198674197202, guid: 0cb3864947f93ee4891a2712dbe57d8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1838,6 +1833,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1705070783558740050, guid: 0cb3864947f93ee4891a2712dbe57d8b,
+        type: 3}
+      propertyPath: m_Name
+      value: Player One Score Menu Panel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cb3864947f93ee4891a2712dbe57d8b, type: 3}
