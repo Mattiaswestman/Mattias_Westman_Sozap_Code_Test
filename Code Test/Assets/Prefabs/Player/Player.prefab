@@ -201,13 +201,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2a02660ba3be2449240bb618b47da9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  iconRenderer: {fileID: 3830361497726948175}
   projectilePrefab: {fileID: 7759410383511286823, guid: 931a444d6b69a3d41a77241a61871aea,
     type: 3}
   projectileSceneParent: {fileID: 0}
   projectileOrigin: {fileID: 5289564981298067526}
-  iconRenderer: {fileID: 3830361497726948175}
   projectileSpeed: 300
-  cooldown: 2
+  cooldown: 4
 --- !u!114 &-6303598286420101538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,8 +225,8 @@ MonoBehaviour:
   - {fileID: 1271796646644085887}
   - {fileID: 7211804134968396032}
   - {fileID: 1755233618856357318}
-  duration: 3
-  cooldown: 3
+  duration: 1
+  cooldown: 4
 --- !u!114 &2707352976831731954
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         myInvincibility = GetComponent<Invincibility>();
-        if(myInvincibility == null)
+        if (myInvincibility == null)
         {
             Debug.LogError($"Health: No Invincibility component found on {gameObject.name}.");
             enabled = false;
@@ -23,7 +23,7 @@ public class Health : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")
         {
             isAlive = false;
 
@@ -33,16 +33,21 @@ public class Health : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "LevelBoundary")
+        if (collision.tag == "LevelBoundary")
         {
             isAlive = false;
 
             gameObject.SetActive(false);
         }
-        if(collision.tag == "PlayerTrail" && !myInvincibility.IsActive)
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        // Collides with this trail if invincibility is off.
+        if (collision.tag == "PlayerTrail" && !myInvincibility.IsActive)
         {
             isAlive = false;
-            
+
             gameObject.SetActive(false);
         }
     }

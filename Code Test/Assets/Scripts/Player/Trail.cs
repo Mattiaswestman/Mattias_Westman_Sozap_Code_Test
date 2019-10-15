@@ -19,20 +19,20 @@ public class Trail : MonoBehaviour
     [SerializeField] private float pauseTime = 0f;
 
     private Health myHealth = null;
-
-    private Coroutine drawRoutine = null;
-    private Coroutine pauseRoutine = null;
-
+    
     private bool isDrawing = false;
     public bool IsDrawing { set { isDrawing = value; } }
     private bool isPaused = true;
     public bool IsPaused { set { isPaused = value; } }
 
+    private Coroutine drawRoutine = null;
+    private Coroutine pauseRoutine = null;
+
 
     private void Awake()
     {
         myHealth = GetComponent<Health>();
-        if(myHealth == null)
+        if (myHealth == null)
         {
             Debug.LogError($"Trail: No Health component found on {gameObject.name}.");
             enabled = false;
@@ -42,28 +42,28 @@ public class Trail : MonoBehaviour
     
     private void FixedUpdate()
     {
-        if(!isPaused && !isDrawing && myHealth.IsAlive)
+        if (!isPaused && !isDrawing && myHealth.IsAlive)
         {
             drawRoutine = StartCoroutine(DrawTrailRoutine());
         }
     }
     
-    public void RemoveTrailSection()
-    {
-
-    }
-
+    // Creates a trail object consisting of a LineRenderer and an EdgeCollider2D, that both is feed positions the player passes over.
+    //
     private IEnumerator DrawTrailRoutine()
     {
         isDrawing = true;
 
+        // Set the time this trail should be drawn.
         var totalDrawTime = drawTime + (Random.Range(-maxDrawTimeDeviation, maxDrawTimeDeviation));
         var timer = 0f;
 
         GameObject trail = new GameObject("Trail", typeof(LineRenderer), typeof(EdgeCollider2D));
         trail.tag = "PlayerTrail";
+        // All trails are grouped in a mutual scene parent.
         trail.transform.SetParent(trailSceneParent);
 
+        // Initialize the LineRenderer.
         LineRenderer trailRenderer = null;
         trailRenderer = trail.GetComponent<LineRenderer>();
 
@@ -74,21 +74,28 @@ public class Trail : MonoBehaviour
         trailRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         trailRenderer.receiveShadows = false;
 
+        // Initialize the EdgeCollider2D.
         EdgeCollider2D trailCollider = null;
         trailCollider = trail.GetComponent<EdgeCollider2D>();
 
         trailCollider.isTrigger = true;
         trailCollider.edgeRadius = lineWidth / 2;
         
+        // Create a list that holds the positions this trail is built with.
         var points = new List<Vector2>();
 
-        while(timer < totalDrawTime)
+        // Draw the trail until total draw time has been reached.
+        while (timer < totalDrawTime)
         {
+            // Start adding player positions to points list.
             points.Add(trailOrigin.position);
+
+            // Add the current player position to the LineRenderer.
             trailRenderer.positionCount = points.Count;
             trailRenderer.SetPosition(trailRenderer.positionCount - 1, trailOrigin.position);
 
-            if(points.Count > 1)
+            // Update the collider with the points list.
+            if (points.Count > 1)
             {
                 trailCollider.points = points.ToArray();
             }
@@ -96,10 +103,12 @@ public class Trail : MonoBehaviour
             timer += Time.fixedDeltaTime;
             yield return new WaitForFixedUpdate();
         }
-            
+        
         pauseRoutine = StartCoroutine(PauseTrailRoutine());
     }
 
+    // Pauses trail drawing for a given time.
+    //
     private IEnumerator PauseTrailRoutine()
     {
         isPaused = true;

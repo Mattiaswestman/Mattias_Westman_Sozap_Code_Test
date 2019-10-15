@@ -22,13 +22,13 @@ public class InputManager : MonoBehaviour
     private Weapon myWeapon = null;
     private Invincibility myInvincibility = null;
 
+    private Vector2 moveDirection = Vector2.right;
+    public Vector2 MoveDirection { set { moveDirection = value; } }
+
     private bool isControllable = false;
     public bool IsControllable { set { isControllable = value; } }
     private bool canMove = false;
     public bool CanMove { set { canMove = value; } }
-
-    private Vector2 moveDirection = Vector2.right;
-    public Vector2 MoveDirection { set { moveDirection = value; } }
 
     private const float TURN_RIGHT_MODIFIER = -1f;
     private const float TURN_LEFT_MODIFIER = 1f;
@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
     private void Awake()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        if(myRigidbody == null)
+        if (myRigidbody == null)
         {
             Debug.LogError($"InputManager: No Rigidbody2D component found on {gameObject.name}.");
             enabled = false;
@@ -45,7 +45,7 @@ public class InputManager : MonoBehaviour
         }
 
         myHealth = GetComponent<Health>();
-        if(myHealth == null)
+        if (myHealth == null)
         {
             Debug.LogError($"InputManager: No Health component found on {gameObject.name}.");
             enabled = false;
@@ -53,7 +53,7 @@ public class InputManager : MonoBehaviour
         }
 
         myWeapon = GetComponent<Weapon>();
-        if(myWeapon == null)
+        if (myWeapon == null)
         {
             Debug.LogError($"InputManager: No Weapon component found on {gameObject.name}.");
             enabled = false;
@@ -61,7 +61,7 @@ public class InputManager : MonoBehaviour
         }
 
         myInvincibility = GetComponent<Invincibility>();
-        if(myInvincibility == null)
+        if (myInvincibility == null)
         {
             Debug.LogError($"InputManager: No Invincibility component found on {gameObject.name}.");
             enabled = false;
@@ -71,7 +71,7 @@ public class InputManager : MonoBehaviour
     
     private void Update()
     {
-        if(canMove && myHealth.IsAlive)
+        if (canMove && myHealth.IsAlive)
         {
             ProcessInput();
         }
@@ -79,11 +79,11 @@ public class InputManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(isControllable && myHealth.IsAlive)
+        if (isControllable && myHealth.IsAlive)
         {
             ProcessFixedInput();
 
-            if(canMove)
+            if (canMove)
             {
                 Move();
             }
@@ -92,11 +92,11 @@ public class InputManager : MonoBehaviour
 
     private void ProcessInput()
     {
-        if(Input.GetKeyDown(UpKey) && !myWeapon.IsOnCooldown)
+        if (Input.GetKeyDown(UpKey) && !myWeapon.IsOnCooldown)
         {
             myWeapon.Shoot(moveDirection);
         }
-        if(Input.GetKeyDown(DownKey) && !myInvincibility.IsOnCooldown)
+        if (Input.GetKeyDown(DownKey) && !myInvincibility.IsOnCooldown)
         {
             myInvincibility.ActivateInvincibility();
         }
@@ -104,11 +104,11 @@ public class InputManager : MonoBehaviour
 
     private void ProcessFixedInput()
     {
-        if(Input.GetKey(RightKey))
+        if (Input.GetKey(RightKey))
         {
             Turn(TURN_RIGHT_MODIFIER);
         }
-        if(Input.GetKey(LeftKey))
+        if (Input.GetKey(LeftKey))
         {
             Turn(TURN_LEFT_MODIFIER);
         }

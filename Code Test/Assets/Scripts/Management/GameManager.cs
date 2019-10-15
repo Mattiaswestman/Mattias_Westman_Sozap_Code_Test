@@ -13,22 +13,22 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> activePlayers = new List<GameObject>();
     public List<GameObject> ActivePlayers { get { return activePlayers; } }
-    private List<int> playerPoints = new List<int>();
+    [HideInInspector] public List<int> playerScore = new List<int>();
 
-    private int playerCount = 2;
+    public int playerCount = 2;
     private int currentRoundNumber = 1;
 
-    private bool hasGameRoundStarted = false;
+    private bool hasRoundStarted = false;
     private bool isGameOver = false;
 
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
-        else if(instance != this)
+        else if (instance != this)
         {
             enabled = false;
             Destroy(gameObject);
@@ -44,60 +44,61 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(UIManager.instance.IsCountdownOver)
+        if (UIManager.instance.IsCountdownOver)
         {
             UIManager.instance.IsCountdownOver = false;
 
             SetPlayersCanMove(true);
 
-            hasGameRoundStarted = true;
+            hasRoundStarted = true;
         }
-        if(hasGameRoundStarted)
+        if (hasRoundStarted)
         {
             CheckIfRoundOver();
         }
     }
 
-    // Controls how many players are still alive in the current game round. Will end it when 1 or less players is alive.
+    // Checks how many players are still alive in the current game round. Will end when 1 or less players is alive.
     //
     private void CheckIfRoundOver()
     {
         var playersAlive = activePlayers.Count;
 
-        for(int i = 0; i < activePlayers.Count; i++)
+        for (int i = 0; i < activePlayers.Count; i++)
         {
-            if(!activePlayers[i].GetComponent<Health>().IsAlive)
+            if (!activePlayers[i].GetComponent<Health>().IsAlive)
             {
                 playersAlive--;
             }
         }
 
-        if(playersAlive <= 1)
+        if (playersAlive <= 1)
         {
-            hasGameRoundStarted = false;
+            hasRoundStarted = false;
             EndRound();
         }
     }
 
-    // Starts a new game. 
-    // Is called from the PLAY button on the main menu.
+    // Starts a new game. Is called from the "PLAY" button on the Main Menu.
     //
     public void StartGame()
     {
-        for(int i = 0; i < players.Length; i++)
+        // Initialize active players list and score list with the players that are active. 
+        // Is done to avoid work on players that are not apart of the current game session.
+        for (int i = 0; i < players.Length; i++)
         {
-            if(players[i].activeSelf)
+            if (players[i].activeSelf)
             {
                 activePlayers.Add(players[i]);
-                playerPoints.Add(0);
+                playerScore.Add(0);
             }
         }
         
         StartRound();
     }
 
-    // Initializes and starts a new game round. When countdown is started the game logic is handled by the Update() function.
-    // Is called from StartGame() or from the "Next round" button on the score menu.
+    // Initializes and starts a new game round. When countdown is over the game logic is handled by the Update() function.
+    // Is called from StartGame() or from the "Next round" button on the Score Menu.
     //
     public void StartRound()
     {
@@ -108,8 +109,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.StartCountdown(currentRoundNumber);
     }
 
-    // Disables player movement, updates score and checks for a winner. Will lead to either a new game round or end of game.
-    // Is called from the Update() function.
+    // Does post round work before opening the Score Menu. Is called by the Update() function when a round is over.
     //
     private void EndRound()
     {
@@ -120,9 +120,9 @@ public class GameManager : MonoBehaviour
         DestroyChildObjects(projectilesSceneParent);
 
         UpdateScore();
-        UIManager.instance.UpdateUIScore(playerPoints);
+        UIManager.instance.UpdateUIScore(playerScore);
 
-        if(isGameOver)
+        if (isGameOver)
         {
             UIManager.instance.SetUIObjectActive(UIManager.instance.nextRoundButton, false);
             UIManager.instance.SetUIObjectActive(UIManager.instance.menuButton, true);
@@ -131,6 +131,8 @@ public class GameManager : MonoBehaviour
         UIManager.instance.OpenScoreMenu();
     }
 
+    // Resets the game and opens the Main Menu. Is called from the "Menu" button on the Score Menu.
+    //
     public void EndGame()
     {
         ResetGame();
@@ -138,9 +140,11 @@ public class GameManager : MonoBehaviour
         UIManager.instance.OpenMainMenu();
     }
 
+    // Resets values needed to start a new round.
+    //
     private void ResetRound()
     {
-        for(int i = 0; i < activePlayers.Count; i++)
+        for (int i = 0; i < activePlayers.Count; i++)
         {
             activePlayers[i].GetComponent<PlayerManager>().ResetPlayer();
             activePlayers[i].GetComponent<Trail>().StopAllCoroutines();
@@ -149,18 +153,23 @@ public class GameManager : MonoBehaviour
         DestroyChildObjects(trailsSceneParent);
     }
 
+    // Resets values needed to start a new game.
+    //
     private void ResetGame()
     {
         ResetRound();
 
-        for(int playerIndex = 0; playerIndex < activePlayers.Count; playerIndex++)
+        // Sets winners to false and resets all point bars on Score Menu.
+        for (int i = 0; i < activePlayers.Count; i++)
         {
-            UIManager.instance.SetPlayerHasWon(playerIndex, false);
+            UIManager.instance.SetWinnerUI(i, false);
+            UIManager.instance.playerPointsBars[i].ResetPointsBar();
         }
 
         activePlayers.Clear();
-        playerPoints.Clear();
+        playerScore.Clear();
 
+        // Change "Menu" button to "Next round" button for next time Score Menu is opened.
         UIManager.instance.SetUIObjectActive(UIManager.instance.menuButton, false);
         UIManager.instance.SetUIObjectActive(UIManager.instance.nextRoundButton, true);
         
@@ -168,31 +177,34 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
     }
     
+    // Updates the score of all active players and checks for winners.
+    //
     private void UpdateScore()
     {
-        for(int i = 0; i < activePlayers.Count; i++)
+        for (int i = 0; i < activePlayers.Count; i++)
         {
-            playerPoints[i] += activePlayers[i].GetComponent<RoundScore>().CurrentRoundPoints;
+            playerScore[i] += activePlayers[i].GetComponent<RoundScore>().CurrentRoundScore;
 
-            if(activePlayers[i].GetComponent<Health>().IsAlive)
+            if (activePlayers[i].GetComponent<Health>().IsAlive)
             {
-                playerPoints[i] += 30;
+                playerScore[i] += 30;
             }
             
-            if(playerPoints[i] >= 150)
+            if (playerScore[i] >= 150)
             {
-                playerPoints[i] = 150;
-                UIManager.instance.SetPlayerHasWon(i, true);
+                playerScore[i] = 150;
+                UIManager.instance.SetWinnerUI(i, true);
                 isGameOver = true;
             }
         }
     }
 
-    // Increases the number of players, and requests updates of the UI. Is called from a button on the main menu.
+    // Increases the player count, and requests updates of the UI.
+    // Is called from arrow button on the Main Menu.
     //
     public void IncreasePlayerCount()
     {
-        if(playerCount < 4)
+        if (playerCount < 4)
         {
             playerCount++;
 
@@ -202,11 +214,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Decreases the number of players, and requests updates of the UI. Is called from a button on the main menu.
+    // Decreases the player count, and requests updates of the UI.
+    // Is called from arrow button on the Main Menu.
     //
     public void DecreasePlayerCount()
     {
-        if(playerCount > 2)
+        if (playerCount > 2)
         {
             playerCount--;
 
@@ -215,10 +228,12 @@ public class GameManager : MonoBehaviour
             SetPlayerObjectsActive(playerCount);
         }
     }
-    
+
+    // Sets the active state of the player spaceships based on player count.
+    //
     private void SetPlayerObjectsActive(int playerCount)
     {
-        switch(playerCount)
+        switch (playerCount)
         {
             case 2:
                 players[2].SetActive(false);
@@ -240,27 +255,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Gives active players turn control if true. Called to let players change start direction during countdown.
+    //
     private void SetPlayersIsControllable(bool value)
     {
-        for(int i = 0; i < activePlayers.Count; i++)
+        for (int i = 0; i < activePlayers.Count; i++)
         {
             activePlayers[i].GetComponent<PlayerManager>().SetPlayerIsControllable(value);
         }
     }
 
+    // Gives active players total control if true, including shooting, invincibility, trail generation, etc. Called when gameplay starts.
+    //
     private void SetPlayersCanMove(bool value)
     {
-        for(int i = 0; i < activePlayers.Count; i++)
+        for (int i = 0; i < activePlayers.Count; i++)
         {
             activePlayers[i].GetComponent<PlayerManager>().SetPlayerCanMove(value);
         }
     }
 
+    // Destroys all children of a given scene object. Used to remove projectiles and trails from their scene parent.
+    //
     private void DestroyChildObjects(Transform sceneParentObject)
     {
         var children = new List<GameObject>();
 
-        foreach(Transform child in sceneParentObject)
+        foreach (Transform child in sceneParentObject)
         {
             children.Add(child.gameObject);
         }

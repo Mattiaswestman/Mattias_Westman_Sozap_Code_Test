@@ -6,21 +6,28 @@ using TMPro;
 public class RoundScore : MonoBehaviour
 {
     [Header("References")]
-    public MeshRenderer scoreRenderer = null;
+    [SerializeField] private MeshRenderer scoreRenderer = null;
     [SerializeField] private TextMeshPro scoreText = null;
 
-    private int currentRoundPoints = 0;
-    public int CurrentRoundPoints { get { return currentRoundPoints; } }
+    private int currentRoundScore = 0;
+    public int CurrentRoundScore { get { return currentRoundScore; } }
 
-    public void UpdateRoundScore()
+    // Updates the score displayed above the player during gameplay. Is called by a fired projectile that has hit another player.
+    //
+    public void UpdateScore()
     {
-        currentRoundPoints += 10;
-        UIManager.instance.SetTextComponentToInt(scoreText, currentRoundPoints);
+        currentRoundScore += 10;
+        UIManager.instance.SetTextComponentToInt(scoreText, currentRoundScore);
     }
 
-    public void ResetRoundScore()
+    public void SetScoreVisibility(bool value)
     {
-        currentRoundPoints = 0;
+        scoreRenderer.enabled = value;
+    }
+
+    public void ResetScore()
+    {
+        currentRoundScore = 0;
         UIManager.instance.SetTextComponentToInt(scoreText, 0);
     }
 }

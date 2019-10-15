@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -22,7 +23,7 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         myInputManager = GetComponent<InputManager>();
-        if(myInputManager == null)
+        if (myInputManager == null)
         {
             Debug.LogError($"PlayerManager: No InputManager component found on {gameObject.name}.");
             enabled = false;
@@ -30,7 +31,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         myHealth = GetComponent<Health>();
-        if(myHealth == null)
+        if (myHealth == null)
         {
             Debug.LogError($"PlayerManager: No Health component found on {gameObject.name}.");
             enabled = false;
@@ -38,7 +39,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         myWeapon = GetComponent<Weapon>();
-        if(myWeapon == null)
+        if (myWeapon == null)
         {
             Debug.LogError($"PlayerManager: No Weapon component found on {gameObject.name}.");
             enabled = false;
@@ -46,7 +47,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         myInvincibility = GetComponent<Invincibility>();
-        if(myInvincibility == null)
+        if (myInvincibility == null)
         {
             Debug.LogError($"PlayerManager: No Invincibility component found on {gameObject.name}.");
             enabled = false;
@@ -54,7 +55,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         myTrail = GetComponent<Trail>();
-        if(myTrail == null)
+        if (myTrail == null)
         {
             Debug.LogError($"PlayerManager: No Trail component found on {gameObject.name}.");
             enabled = false;
@@ -62,7 +63,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         myRoundScore = GetComponent<RoundScore>();
-        if(myRoundScore == null)
+        if (myRoundScore == null)
         {
             Debug.LogError($"PlayerManager: No RoundScore component found on {gameObject.name}.");
             enabled = false;
@@ -79,24 +80,31 @@ public class PlayerManager : MonoBehaviour
         mySpaceshipTransform.rotation = startRotation;
     }
 
+    // Called from GameManager to give players turn control, if true. Will also reveal round score above players.
+    //
     public void SetPlayerIsControllable(bool value)
     {
         myInputManager.IsControllable = value;
-
-        myRoundScore.scoreRenderer.enabled = value;
+        myRoundScore.SetScoreVisibility(value);
     }
 
+    // Called from GameManager to start player movement, trail generation, and give players control over weapon and invincibility.
+    //
     public void SetPlayerCanMove(bool value)
     {
         myInputManager.CanMove = value;
-        myTrail.IsPaused = !value;
 
         myWeapon.StopAllCoroutines();
-        myWeapon.iconRenderer.enabled = value;
+        myWeapon.SetIconVisibility(value);
+
         myInvincibility.StopAllCoroutines();
-        myInvincibility.iconRenderer.enabled = value;
+        myInvincibility.SetIconVisibility(value);
+
+        myTrail.IsPaused = !value;
     }
 
+    // Resets the player to its default state. Is called from GameManager when a player reset is needed, i.e. round reset, game reset.
+    //
     public void ResetPlayer()
     {
         gameObject.SetActive(true);
@@ -111,17 +119,17 @@ public class PlayerManager : MonoBehaviour
         myHealth.IsAlive = true;
 
         myWeapon.IsOnCooldown = false;
-        myWeapon.iconRenderer.enabled = false;
+        myWeapon.SetIconVisibility(false);
 
         myInvincibility.IsActive = false;
         myInvincibility.IsOnCooldown = false;
         myInvincibility.SetShipAlpha(1f);
-        myInvincibility.iconRenderer.enabled = false;
+        myInvincibility.SetIconVisibility(false);
 
         myTrail.IsDrawing = false;
         myTrail.IsPaused = true;
 
-        myRoundScore.ResetRoundScore();
-        myRoundScore.scoreRenderer.enabled = false;
+        myRoundScore.ResetScore();
+        myRoundScore.SetScoreVisibility(false);
     }
 }

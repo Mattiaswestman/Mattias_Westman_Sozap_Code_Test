@@ -7,8 +7,6 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance = null;
 
-    [SerializeField] private Animation countdownAnimation = null;
-
     [Header("Canvases")]
     public Canvas mainMenuCanvas = null;
     public Canvas scoreMenuCanvas = null;
@@ -26,13 +24,13 @@ public class UIManager : MonoBehaviour
     public GameObject[] playerWinnerTexts = null;
 
     [Header("Various UI Elements")]
+    [SerializeField] private Animation countdownAnimation = null;
+    [SerializeField] private TextMeshProUGUI countdownText = null;
     public TextMeshProUGUI playerCountText = null;
-    public TextMeshProUGUI countdownText = null;
     public GameObject nextRoundButton = null;
     public GameObject menuButton = null;
     
     private Canvas activeCanvas = null;
-    
 
     private Coroutine fadeInRoutine = null;
     private Coroutine fadeOutRoutine = null;
@@ -44,11 +42,11 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
-        else if(instance != this)
+        else if (instance != this)
         {
             enabled = false;
             Destroy(gameObject);
@@ -62,13 +60,14 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if(isScoreMenuLoaded)
+        if (isScoreMenuLoaded)
         {
             isScoreMenuLoaded = false;
 
-            for(int i = 0; i < GameManager.instance.ActivePlayers.Count; i++)
+            for (int i = 0; i < GameManager.instance.ActivePlayers.Count; i++)
             {
-                playerPointsBars[i].UpdatePointsBar(int.Parse(playerScoreTexts[i].text));
+                playerPointsBars[i].UpdatePointsBar(GameManager.instance.playerScore[i]);
+                //playerPointsBars[i].UpdatePointsBar(30);
             }
         }
     }
@@ -85,9 +84,12 @@ public class UIManager : MonoBehaviour
         activeCanvas = mainMenuCanvas;
     }
 
+    // Closes the current canvas and fades in the Main Menu. Is called from the "Menu" button on the Score Menu.
+    //
     public void OpenMainMenu()
     {
         activeCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        activeCanvas.GetComponent<CanvasGroup>().interactable = false;
         SetCanvasEnabled(activeCanvas, false);
         
         activeCanvas = mainMenuCanvas;
@@ -96,9 +98,12 @@ public class UIManager : MonoBehaviour
         fadeInRoutine = StartCoroutine(FadeInRoutine(activeCanvas, 0.5f));
     }
 
+    // Closes the current canvas and fades in the Score Menu. Is called by the GameManager when a round ends.
+    //
     public void OpenScoreMenu()
     {
         activeCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+        activeCanvas.GetComponent<CanvasGroup>().interactable = false;
         SetCanvasEnabled(activeCanvas, false);
         
         activeCanvas = scoreMenuCanvas;
@@ -107,8 +112,11 @@ public class UIManager : MonoBehaviour
         fadeInRoutine = StartCoroutine(FadeInRoutine(activeCanvas, 0.5f));
     }
 
+    // Fades out the current canvas and starts countdown to the next round. Notifies GameManager when countdown is over.
+    //
     public void StartCountdown(int roundNumber)
     {
+        activeCanvas.GetComponent<CanvasGroup>().interactable = false;
         fadeOutRoutine = StartCoroutine(FadeOutRoutine(activeCanvas, 0.25f));
 
         activeCanvas = gameCanvas;
@@ -118,17 +126,19 @@ public class UIManager : MonoBehaviour
         countdownRoutine = StartCoroutine(CountdownRoutine(roundNumber));
     }
 
-    // TODO: Rewrite?
+    // Sets the winning animation and "Winner" text for the given player index. Is called "true" by the GameManager when a winning player is found.
     //
-    public void SetPlayerHasWon(int playerIndex, bool value)
+    public void SetWinnerUI(int playerIndex, bool value)
     {
         scoreMenuPlayerPanels[playerIndex].GetComponentInChildren<Animator>().SetBool("hasWon", value);
         playerWinnerTexts[playerIndex].SetActive(value);
     }
 
+    // Sets the visibility of player UIs based on the current player count.
+    //
     public void SetPlayerUIEnabled(int playerCount)
     {
-        switch(playerCount)
+        switch (playerCount)
         {
             case 2:
                 SetUIObjectActive(mainMenuPlayerPanels[2], false);
@@ -159,14 +169,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // Updates the UI score text with the current player score.
+    //
     public void UpdateUIScore(List<int> playerScore)
     {
-        for(int i = 0; i < playerScore.Count; i++)
+        for (int i = 0; i < playerScore.Count; i++)
         {
             SetTextComponentToInt(playerScoreTexts[i], playerScore[i]);
         }
     }
-
+    
     public void SetCanvasEnabled(Canvas canvas, bool value)
     {
         canvas.gameObject.GetComponent<Canvas>().enabled = value;
@@ -181,7 +193,7 @@ public class UIManager : MonoBehaviour
     {
         uiObject.SetActive(!uiObject.activeSelf);
     }
-    
+
     public void SetTextComponentToString(TextMeshProUGUI textComponent, string text)
     {
         textComponent.SetText(text);
@@ -201,12 +213,14 @@ public class UIManager : MonoBehaviour
     {
         textComponent.SetText(number.ToString());
     }
-    
+
+    // Fades in the given canvas over a given duration. Is done by modifying the alpha of its CanvasGroup.
+    //
     private IEnumerator FadeInRoutine(Canvas fadeInCanvas, float fadeDuration)
     {
         var timer = 0f;
 
-        while(timer < fadeDuration)
+        while (timer < fadeDuration)
         {
             float proportionCompleted = timer / fadeDuration;
 
@@ -219,18 +233,22 @@ public class UIManager : MonoBehaviour
         }
 
         fadeInCanvas.GetComponent<CanvasGroup>().alpha = 1f;
+        fadeInCanvas.GetComponent<CanvasGroup>().interactable = true;
 
-        if(fadeInCanvas == scoreMenuCanvas)
+        // If the canvas being faded in is the Score Menu, set bool to true. Is used to delay the points bar increasing until the Score Menu is fully visible.
+        if (fadeInCanvas == scoreMenuCanvas)
         {
             isScoreMenuLoaded = true;
         }
     }
-    
+
+    // Fades out the given canvas over a given duration. Is done by modifying the alpha of its CanvasGroup.
+    //
     private IEnumerator FadeOutRoutine(Canvas fadeOutCanvas, float fadeDuration)
     {
         var timer = 0f;
 
-        while(timer < fadeDuration)
+        while (timer < fadeDuration)
         {
             float proportionCompleted = timer / fadeDuration;
 
@@ -245,22 +263,28 @@ public class UIManager : MonoBehaviour
         fadeOutCanvas.GetComponent<CanvasGroup>().alpha = 0f;
     }
 
+    // Starts a countdown with the given round number. I'm unfortunately not 100% satisfied with how this works to be honest (Which I probably shouldn't reveal..).
+    //
     private IEnumerator CountdownRoutine(int roundNumber)
     {
         string roundIntro = "";
 
-        if(roundNumber == 1)
+        // Decides what the intro to the countdown should say, based on the given round number.
+        if (roundNumber == 1)
         {
+            // If round number is 1, present the goal of the game.
             roundIntro = "First to 150p Wins";
         }
         else
         {
+            // Else present which round it currently is.
             roundIntro = $"Round {roundNumber}";
         }
 
-        for(int i = 0; i < 5; i++)
+        // Loop through all five steps of the countdown, change the countdown text depending on index, and play its respective animation.
+        for (int i = 0; i < 5; i++)
         {
-            switch(i)
+            switch (i)
             {
                 case 0:
                     SetTextComponentToString(countdownText, roundIntro);
@@ -291,44 +315,17 @@ public class UIManager : MonoBehaviour
                     break;
             }
             
-            while(countdownAnimation.isPlaying)
+            // Pause each iteration until its animation is done playing.
+            while (countdownAnimation.isPlaying)
             {
                 yield return null;
             }
         }
 
+        // Hide the game canvas.
         gameCanvas.GetComponent<CanvasGroup>().alpha = 0f;
+
+        // Set countdown is over, which the GameManager checks to know when the gameplay should start.
         isCountdownOver = true;
     }
 }
-
-/*
-private IEnumerator CountdownRoutine(int roundNumber, float duration)
-    {
-        string roundIntro = "";
-
-        if(roundNumber == 1)
-        {
-            roundIntro = "First to 150p Wins";
-        }
-        else
-        {
-            roundIntro = $"Round {roundNumber}";
-        }
-
-        SetTextComponentToString(countdownText, roundIntro);
-
-
-        float timer = duration;
-
-        while(timer >= 0f)
-        {
-
-            timer -= Time.deltaTime;
-            yield return null;
-        }
-        
-        gameCanvas.GetComponent<CanvasGroup>().alpha = 0f;
-        GameManager.instance.HasCountdownFinished = true;
-    } 
-*/
