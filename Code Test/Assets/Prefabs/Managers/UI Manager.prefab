@@ -43,14 +43,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 048e632ec8f1db9448daa9821e5afbea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuCanvas: {fileID: 0}
+  mainMenuCanvas: {fileID: 0}
+  scoreMenuCanvas: {fileID: 0}
   gameCanvas: {fileID: 0}
-  playerOneMenuPanel: {fileID: 0}
-  playerTwoMenuPanel: {fileID: 0}
-  playerThreeMenuPanel: {fileID: 0}
-  playerFourMenuPanel: {fileID: 0}
-  playerOneScorePanel: {fileID: 0}
-  playerTwoScorePanel: {fileID: 0}
-  playerThreeScorePanel: {fileID: 0}
-  playerFourScorePanel: {fileID: 0}
+  mainMenuPlayerPanels:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  scoreMenuPlayerPanels:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playerScoreTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playerPointsBars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  playerWinnerTexts:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  countdownAnimation: {fileID: 0}
+  countdownText: {fileID: 0}
   playerCountText: {fileID: 0}
+  nextRoundButton: {fileID: 0}
+  menuButton: {fileID: 0}

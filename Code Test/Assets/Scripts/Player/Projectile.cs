@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    // The player that fired this projectile.
     public GameObject owner;
     
 

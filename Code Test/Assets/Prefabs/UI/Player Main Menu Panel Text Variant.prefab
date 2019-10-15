@@ -92,8 +92,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -248,8 +248,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -404,8 +404,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -560,8 +560,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -708,12 +708,12 @@ PrefabInstance:
     - target: {fileID: 3922279769997598107, guid: da3c2bd2c5c034841b1d1bb57bcaf38d,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 240
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 3922279769997598107, guid: da3c2bd2c5c034841b1d1bb57bcaf38d,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 160
+      value: 225
       objectReference: {fileID: 0}
     - target: {fileID: 3922279769997598107, guid: da3c2bd2c5c034841b1d1bb57bcaf38d,
         type: 3}
@@ -749,6 +749,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player Start Position
+      objectReference: {fileID: 0}
+    - target: {fileID: 5965470431849583255, guid: da3c2bd2c5c034841b1d1bb57bcaf38d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2767916567586297549, guid: da3c2bd2c5c034841b1d1bb57bcaf38d,
         type: 3}

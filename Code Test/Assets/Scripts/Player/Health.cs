@@ -40,7 +40,7 @@ public class Health : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
-
+    
     private void OnTriggerStay2D(Collider2D collision)
     {
         // Collides with this trail if invincibility is off.

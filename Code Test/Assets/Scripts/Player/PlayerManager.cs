@@ -73,11 +73,8 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        startPosition = Camera.main.ScreenToWorldPoint(startPositionRectTransform.transform.position);
-        transform.position = startPosition;
-
-        startRotation = Quaternion.Euler(Vector3.right);
-        mySpaceshipTransform.rotation = startRotation;
+        SetStartPosition();
+        SetStartRotation();
     }
 
     // Called from GameManager to give players turn control, if true. Will also reveal round score above players.
@@ -88,7 +85,7 @@ public class PlayerManager : MonoBehaviour
         myRoundScore.SetScoreVisibility(value);
     }
 
-    // Called from GameManager to start player movement, trail generation, and give players control over weapon and invincibility.
+    // Called from GameManager to start player movement, trail generation, and give players control over weapon and invincibility, if true.
     //
     public void SetPlayerCanMove(bool value)
     {
@@ -100,6 +97,7 @@ public class PlayerManager : MonoBehaviour
         myInvincibility.StopAllCoroutines();
         myInvincibility.SetIconVisibility(value);
 
+        myTrail.StopAllCoroutines();
         myTrail.IsPaused = !value;
     }
 
@@ -131,5 +129,17 @@ public class PlayerManager : MonoBehaviour
 
         myRoundScore.ResetScore();
         myRoundScore.SetScoreVisibility(false);
+    }
+
+    private void SetStartPosition()
+    {
+        startPosition = Camera.main.ScreenToWorldPoint(startPositionRectTransform.transform.position);
+        transform.position = startPosition;
+    }
+
+    private void SetStartRotation()
+    {
+        startRotation = Quaternion.Euler(Vector3.right);
+        mySpaceshipTransform.rotation = startRotation;
     }
 }

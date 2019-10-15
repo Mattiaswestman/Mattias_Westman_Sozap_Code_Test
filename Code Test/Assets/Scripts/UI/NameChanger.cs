@@ -27,7 +27,7 @@ public class NameChanger : MonoBehaviour
         myInputField.onEndEdit.AddListener(SetTextFromInput);
     }
 
-    // Updates the referenced UI texts of this player when a new name is submitted.
+    // Updates the referenced UI texts when a new name is submitted, and hides the input field afterwards.
     //
     public void SetTextFromInput(string input)
     {

@@ -25,7 +25,7 @@ public class PointsBar : MonoBehaviour
         }
     }
 
-    // Starts coroutine that moves the bar from the current score to the new score. Is called from the UIManager when the Score Menu has been loaded.
+    // Starts coroutine that moves the bar from the current score to the new score. Is called from the UIManager when the Score Menu has been fully faded in.
     //
     public void UpdatePointsBar(int newScore)
     {

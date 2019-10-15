@@ -22,6 +22,7 @@ public class Invincibility : MonoBehaviour
 
     private const float SIN_CURVE_MODIFIER = 10f;
 
+
     // Starts an invincibility coroutine when called from the InputManager.
     //
     public void ActivateInvincibility()
@@ -55,7 +56,7 @@ public class Invincibility : MonoBehaviour
         isActive = true;
         iconRenderer.enabled = false;
 
-        // The spaceship pulses while invincibility is active, which is solved by changing the alpha value its sprites.
+        // The spaceship pulses while invincibility is active, which is solved by changing the alpha value of its sprites.
         while (timer < duration)
         {
             // The alpha value follows a sin curve between values 0 and 1.

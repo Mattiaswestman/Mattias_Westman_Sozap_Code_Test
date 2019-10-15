@@ -13,9 +13,10 @@ public class GameManager : MonoBehaviour
 
     private List<GameObject> activePlayers = new List<GameObject>();
     public List<GameObject> ActivePlayers { get { return activePlayers; } }
-    [HideInInspector] public List<int> playerScore = new List<int>();
+    private List<int> playerScore = new List<int>();
+    public List<int> PlayerScore { get { return playerScore; } }
 
-    public int playerCount = 2;
+    private int playerCount = 2;
     private int currentRoundNumber = 1;
 
     private bool hasRoundStarted = false;
@@ -41,7 +42,7 @@ public class GameManager : MonoBehaviour
         UIManager.instance.SetPlayerUIEnabled(playerCount);
         SetPlayerObjectsActive(playerCount);
     }
-
+    
     private void Update()
     {
         if (UIManager.instance.IsCountdownOver)
@@ -83,8 +84,8 @@ public class GameManager : MonoBehaviour
     //
     public void StartGame()
     {
-        // Initialize active players list and score list with the players that are active. 
-        // Is done to avoid work on players that are not apart of the current game session.
+        // When called, initialize active player list and score list with the players that are active. 
+        // Is done to avoid wasteful calculations on players that are not apart of the current game session.
         for (int i = 0; i < players.Length; i++)
         {
             if (players[i].activeSelf)
@@ -147,7 +148,6 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < activePlayers.Count; i++)
         {
             activePlayers[i].GetComponent<PlayerManager>().ResetPlayer();
-            activePlayers[i].GetComponent<Trail>().StopAllCoroutines();
         }
 
         DestroyChildObjects(trailsSceneParent);

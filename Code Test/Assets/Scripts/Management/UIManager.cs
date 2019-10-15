@@ -58,6 +58,8 @@ public class UIManager : MonoBehaviour
         InitializeUI();
     }
 
+    // Update() delays the increase of the point bars until the Score Menu is fully faded in.
+    //
     private void Update()
     {
         if (isScoreMenuLoaded)
@@ -66,13 +68,12 @@ public class UIManager : MonoBehaviour
 
             for (int i = 0; i < GameManager.instance.ActivePlayers.Count; i++)
             {
-                playerPointsBars[i].UpdatePointsBar(GameManager.instance.playerScore[i]);
-                //playerPointsBars[i].UpdatePointsBar(30);
+                playerPointsBars[i].UpdatePointsBar(GameManager.instance.PlayerScore[i]);
             }
         }
     }
 
-    private void InitializeUI()
+    public void InitializeUI()
     {
         mainMenuCanvas.gameObject.SetActive(true);
         SetCanvasEnabled(mainMenuCanvas, true);
@@ -80,7 +81,7 @@ public class UIManager : MonoBehaviour
         SetCanvasEnabled(scoreMenuCanvas, false);
         gameCanvas.gameObject.SetActive(true);
         SetCanvasEnabled(gameCanvas, false);
-
+        
         activeCanvas = mainMenuCanvas;
     }
 
